@@ -91,6 +91,9 @@ export interface MagicLinkParams {
 export interface AcceptInvitationParams {
     invitationId: string | null | undefined;
 }
+export interface RejectInvitationParams {
+    invitationId: string | null | undefined;
+}
 
 export interface UnifiedServerAuthApi {
     /**
@@ -115,6 +118,9 @@ export interface UnifiedClientAuthApi {
     >;
     organization: {
         acceptInvitation(params: AcceptInvitationParams): Promise<
+            AuthResult<void>
+        >;
+        rejectInvitation(params: RejectInvitationParams): Promise<
             AuthResult<void>
         >;
     };
