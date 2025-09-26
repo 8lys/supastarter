@@ -6,7 +6,7 @@ import {
 	getPurchasesForSession,
 	getSession,
 } from "@shared/lib/middleware-helpers";
-import { withSupabaseSession } from "@repo/auth/providers/supabase/middleware";
+import { withAuthSession } from "@repo/auth/providers/supabase/middleware";
 import createMiddleware from "next-intl/middleware";
 import { type NextRequest, NextResponse } from "next/server";
 import { withQuery } from "ufo";
@@ -22,7 +22,7 @@ export default async function middleware(req: NextRequest) {
         process.env.NEXT_PUBLIC_SUPABASE_URL &&
         process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
     ) {
-        const { response: supaRes } = await withSupabaseSession(req);
+        const { response: supaRes } = await withAuthSession(req);
         baseResponse = supaRes;
     }
     const getBaseResponse = () => baseResponse ?? NextResponse.next({ request: req });

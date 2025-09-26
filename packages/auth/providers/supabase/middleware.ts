@@ -31,4 +31,10 @@ export async function withSupabaseSession(request: NextRequest) {
     return { supabase, user, response: supabaseResponse };
 }
 
+// Provider-agnostic wrapper used by apps
+export async function withAuthSession(request: NextRequest) {
+    const { response } = await withSupabaseSession(request);
+    return { response };
+}
+
 
