@@ -1,0 +1,57 @@
+---
+description: Mandatory audit checklist for AI to verify all work against rules and requirements
+globs: 
+alwaysApply: true
+---
+
+# 🔍 AI Work Audit Checklist
+
+**MANDATORY**: Before completing ANY task, audit your work against this checklist:
+
+## **Code Quality Audit**
+- [ ] **TypeScript Strict**: No `any` types, strict mode enabled
+- [ ] **No Workarounds**: Solution addresses root cause, not symptoms
+- [ ] **Pattern Compliance**: Follows [systemPatterns.mdc](./systemPatterns.mdc)
+- [ ] **Plugin Architecture**: Respects two-tier plugin system if relevant
+
+## **Tech Stack Compliance**
+- [ ] **Framework Usage**: Correct use of Next.js App Router (no Pages Router)
+- [ ] **Validation**: ArkType for all data validation (no Zod)
+- [ ] **Styling**: Tailwind utilities only (no custom CSS)
+- [ ] **Components**: shadcn/ui components properly vendored
+
+## **Rule Adherence Check**
+- [ ] **Loaded Rules**: Have I loaded and followed relevant context rules? (See [README.md](../README.md) for rule types)
+- [ ] **File Patterns**: Do file locations match monorepo structure?
+- [ ] **Import Rules**: No unstable imports (`next/navigation` not `next/router`)
+- [ ] **Error Handling**: Proper error boundaries and user feedback
+
+## **Testing & Documentation**
+- [ ] **Tests Written**: Unit tests for logic, E2E for critical paths
+- [ ] **Documentation**: Code is self-documenting with clear names
+- [ ] **Examples**: Provided usage examples where helpful
+
+## **Security & Performance**
+- [ ] **Auth**: Supabase RLS policies in place
+- [ ] **Permissions**: Permit.io integration if applicable
+- [ ] **Performance**: No unnecessary re-renders, proper memoization
+
+## **Final Verification**
+Before submitting:
+1. **Re-read the original request** - Did I fully address it?
+2. **Check for assumptions** - Did I verify instead of assume?
+3. **Review changes** - Would this pass code review?
+4. **Test the solution** - Does it actually work?
+
+## **Red Flags - STOP if any are true**
+- 🚨 Using workarounds or "quick fixes"
+- 🚨 Ignoring type errors with `@ts-ignore`
+- 🚨 Copy-pasting without understanding
+- 🚨 Making changes without reading relevant rules
+- 🚨 Assuming instead of verifying
+
+## **Audit Result**
+After checking all items, explicitly state:
+- "✅ Audit passed - all checks complete"
+- "⚠️ Audit concerns - [list specific issues]"
+- "❌ Audit failed - [explain what needs fixing]"

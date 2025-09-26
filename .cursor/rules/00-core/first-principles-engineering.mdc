@@ -1,0 +1,153 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# First Principles Engineering - No Shortcuts
+
+## **Core Philosophy**
+- **NEVER apply band-aids or workarounds** - always solve the root cause
+- **ALWAYS understand the fundamental requirements** before implementing
+- **THINK architecturally** - design proper solutions from first principles
+- **FOLLOW industry best practices** and established patterns
+- **BE METHODICAL** - take time to understand before acting
+- **NO backward-compat pre-launch** - until first public release, do not add legacy/compat fields, migrations, or detection flows. Prefer removal of dead code.
+
+## **Root Cause Analysis Process**
+
+### **Before Any Implementation:**
+1. **Identify the Real Problem**
+   - What is the actual underlying issue, not just the symptoms?
+   - Why is this problem occurring?
+   - What are the constraints and requirements?
+
+2. **Research Proper Solutions**
+   - What are the industry best practices for this type of problem?
+   - How do established frameworks/tools handle this?
+   - What patterns exist for this architectural challenge?
+
+3. **Design the Right Architecture**
+   - What is the proper structure for this solution?
+   - How does this fit into the broader system architecture?
+   - What are the long-term maintenance implications?
+
+## **Anti-Patterns to Avoid**
+
+### **❌ NEVER Do These:**
+- Change `--frozen-lockfile` to `--no-frozen-lockfile` to "fix" CI issues
+- Add conditional logic to skip steps instead of fixing the underlying trigger logic
+- Create workarounds that mask version mismatches or compatibility issues
+- Split workflows to avoid addressing the real workflow design problem
+- Use environment variable hacks instead of proper configuration management
+- Apply quick fixes that work but don't address the systematic issue
+
+### **✅ ALWAYS Do These Instead:**
+- **Version Mismatches**: Align versions across environments (local vs CI)
+- **Workflow Issues**: Design proper CI/CD strategy with clear separation of concerns
+- **Authentication Problems**: Use the correct authentication method for the platform
+- **Configuration Conflicts**: Implement proper configuration architecture
+- **Build Failures**: Fix the actual build/dependency/compatibility issue
+
+## **Implementation Standards**
+
+### **Configuration Management**
+- Use proper configuration hierarchies (workspace > package > environment)
+- Follow platform-specific best practices (GitHub Actions, npm, pnpm, etc.)
+- Implement proper environment variable management
+- Design configuration for multiple environments (dev, staging, prod)
+
+### **CI/CD Architecture**
+- **Separate concerns**: CI (validation) vs CD (deployment)
+- **Proper versioning strategies**: semantic versioning, dev vs stable releases
+- **Industry-standard patterns**: feature branches, release branches, tag-based releases
+- **Comprehensive workflows**: build → test → publish → release
+
+### **Dependency Management**
+- **Consistent package managers** across all environments
+- **Proper lockfile management** with version alignment
+- **Workspace configuration** following monorepo best practices
+- **Resolution strategy** for version conflicts at the workspace level
+
+## **Quality Gates**
+
+### **Before Proposing Any Solution:**
+1. **Can you explain WHY this is the right approach?**
+2. **Does this follow established industry patterns?**
+3. **Will this scale and be maintainable long-term?**
+4. **Are you addressing the root cause, not symptoms?**
+5. **Would an experienced engineer approve this architecture?**
+
+### **Red Flags - Stop and Reconsider:**
+- "This is a quick fix to make it work"
+- "Let's just skip this step to avoid the error"
+- "We can add conditions to work around this"
+- "This workaround should be fine for now"
+- "Let's change the behavior to avoid the problem"
+
+## **Methodical Problem-Solving Process**
+
+### **Step 1: Understand Completely**
+- Read all error messages carefully
+- Understand the intended behavior vs actual behavior
+- Research the underlying technologies and their requirements
+- Identify all stakeholders and use cases
+
+### **Step 2: Research Proper Solutions**
+- Look up official documentation for best practices
+- Research how similar projects handle this challenge
+- Understand the architectural patterns that apply
+- Consider security, performance, and maintainability implications
+
+### **Step 3: Design the Right Solution**
+- Create a proper architectural design
+- Consider all edge cases and environments
+- Plan for testing and validation
+- Document the reasoning and trade-offs
+
+### **Step 4: Implement Systematically**
+- Follow the designed architecture precisely
+- Implement proper error handling and validation
+- Add comprehensive documentation
+- Test across all relevant scenarios
+
+### **Step 5: Validate Thoroughly**
+- Verify the solution addresses the root cause
+- Test in all target environments
+- Confirm it follows established patterns
+- Ensure it's maintainable and scalable
+
+## **Example Applications**
+
+### **GitHub Actions Workflow Design**
+- ❌ **Wrong**: Add conditions to skip publishing on main branch
+- ✅ **Right**: Design separate CI and CD workflows with clear triggers and purposes
+
+### **Package Version Management**
+- ❌ **Wrong**: Use `--allow-same-version` to avoid npm version conflicts
+- ✅ **Right**: Implement proper dual release strategy (dev vs stable) with semantic versioning
+
+### **Environment Configuration**
+- ❌ **Wrong**: Change environment variable names to match what works
+- ✅ **Right**: Use the correct authentication method for the target platform
+
+### **Dependency Issues**
+- ❌ **Wrong**: Change lockfile behavior to bypass version conflicts
+- ✅ **Right**: Align tool versions across environments and fix compatibility
+
+## **Engineering Excellence Mindset**
+
+### **Always Ask:**
+- "What would a senior architect do in this situation?"
+- "How do established open-source projects handle this?"
+- "What are the long-term implications of this approach?"
+- "Is this the right tool/pattern/architecture for this problem?"
+- "Would I be proud to have other engineers review this solution?"
+
+### **Success Criteria:**
+- ✅ Solution addresses root cause, not symptoms
+- ✅ Follows industry best practices and established patterns
+- ✅ Is maintainable and scalable long-term
+- ✅ Works correctly across all target environments
+- ✅ Can be confidently explained and defended to other engineers
+
+**Remember: Taking time to do it right is always faster than dealing with the consequences of shortcuts.**
