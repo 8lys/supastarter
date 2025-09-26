@@ -1,1 +1,1 @@
-export * from "./providers/supabase/client";
+export * from "./providers/better-auth/client";
