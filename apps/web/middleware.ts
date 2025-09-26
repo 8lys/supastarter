@@ -6,6 +6,7 @@ import {
 	getPurchasesForSession,
 	getSession,
 } from "@shared/lib/middleware-helpers";
+import { withSupabaseSession } from "@repo/auth/providers/supabase/middleware";
 import createMiddleware from "next-intl/middleware";
 import { type NextRequest, NextResponse } from "next/server";
 import { withQuery } from "ufo";
@@ -15,8 +16,31 @@ const intlMiddleware = createMiddleware(routing);
 export default async function middleware(req: NextRequest) {
 	const { pathname, origin } = req.nextUrl;
 
-	if (pathname.startsWith("/app")) {
-		const response = NextResponse.next();
+    // Initialize base response and refresh Supabase session cookies when configured
+    let baseResponse: NextResponse | undefined;
+    if (
+        process.env.NEXT_PUBLIC_SUPABASE_URL &&
+        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+    ) {
+        const { response: supaRes } = await withSupabaseSession(req);
+        baseResponse = supaRes;
+    }
+    const getBaseResponse = () => baseResponse ?? NextResponse.next({ request: req });
+    const copyCookies = (from: NextResponse, to: NextResponse) => {
+        try {
+            // @ts-ignore - NextResponse cookies.getAll is available at runtime
+            from.cookies.getAll().forEach(({ name, value, ...rest }) =>
+                // @ts-ignore
+                to.cookies.set(name, value, rest as any),
+            );
+        } catch {
+            // ignore if not available
+        }
+        return to;
+    };
+
+    if (pathname.startsWith("/app")) {
+        const response = getBaseResponse();
 
 		if (!appConfig.ui.saas.enabled) {
 			return NextResponse.redirect(new URL("/", origin));
@@ -26,14 +50,17 @@ export default async function middleware(req: NextRequest) {
 		let locale = req.cookies.get(appConfig.i18n.localeCookieName)?.value;
 
 		if (!session) {
-			return NextResponse.redirect(
-				new URL(
-					withQuery("/auth/login", {
-						redirectTo: pathname,
-					}),
-					origin,
-				),
-			);
+            return copyCookies(
+                response,
+                NextResponse.redirect(
+                    new URL(
+                        withQuery("/auth/login", {
+                            redirectTo: pathname,
+                        }),
+                        origin,
+                    ),
+                ),
+            );
 		}
 
 		if (
@@ -41,14 +68,17 @@ export default async function middleware(req: NextRequest) {
 			!session.user.onboardingComplete &&
 			pathname !== "/app/onboarding"
 		) {
-			return NextResponse.redirect(
-				new URL(
-					withQuery("/app/onboarding", {
-						redirectTo: pathname,
-					}),
-					origin,
-				),
-			);
+            return copyCookies(
+                response,
+                NextResponse.redirect(
+                    new URL(
+                        withQuery("/app/onboarding", {
+                            redirectTo: pathname,
+                        }),
+                        origin,
+                    ),
+                ),
+            );
 		}
 
 		if (
@@ -70,14 +100,17 @@ export default async function middleware(req: NextRequest) {
 					(org) => org.id === session?.session.activeOrganizationId,
 				) || organizations[0];
 
-			return NextResponse.redirect(
-				new URL(
-					organization
-						? `/app/${organization.slug}`
-						: "/app/new-organization",
-					origin,
-				),
-			);
+            return copyCookies(
+                response,
+                NextResponse.redirect(
+                    new URL(
+                        organization
+                            ? `/app/${organization.slug}`
+                            : "/app/new-organization",
+                        origin,
+                    ),
+                ),
+            );
 		}
 
 		const hasFreePlan = Object.values(appConfig.payments.plans).some(
@@ -107,13 +140,14 @@ export default async function middleware(req: NextRequest) {
 				!activePlan &&
 				!validPathsWithoutPlan.some((path) => pathname.startsWith(path))
 			) {
-				return NextResponse.redirect(
-					new URL("/app/choose-plan", origin),
-				);
+                return copyCookies(
+                    response,
+                    NextResponse.redirect(new URL("/app/choose-plan", origin)),
+                );
 			}
 		}
 
-		return response;
+        return response;
 	}
 
 	if (pathname.startsWith("/auth")) {
@@ -121,20 +155,24 @@ export default async function middleware(req: NextRequest) {
 			return NextResponse.redirect(new URL("/", origin));
 		}
 
-		const session = await getSession(req);
+        const response = getBaseResponse();
+        const session = await getSession(req);
 
 		if (session && pathname !== "/auth/reset-password") {
-			return NextResponse.redirect(new URL("/app", origin));
+            return copyCookies(
+                response,
+                NextResponse.redirect(new URL("/app", origin)),
+            );
 		}
 
-		return NextResponse.next();
+        return response;
 	}
 
 	if (!appConfig.ui.marketing.enabled) {
 		return NextResponse.redirect(new URL("/app", origin));
 	}
 
-	return intlMiddleware(req);
+    return intlMiddleware(req);
 }
 
 export const config = {
