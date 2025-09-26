@@ -6,7 +6,7 @@ import {
 	getPurchasesForSession,
 	getSession,
 } from "@shared/lib/middleware-helpers";
-import { withAuthSession } from "@repo/auth/providers/supabase/middleware";
+import { withAuthSession } from "@repo/auth";
 import createMiddleware from "next-intl/middleware";
 import { type NextRequest, NextResponse } from "next/server";
 import { withQuery } from "ufo";
