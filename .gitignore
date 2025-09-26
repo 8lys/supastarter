@@ -1,0 +1,240 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+/playwright-report/
+/test-results/
+/.nyc_output
+
+# Development
+dev-output/
+
+# Next.js
+.next/
+out/
+dist/
+build/
+
+# Production
+/build
+
+# Misc
+.DS_Store
+*.pem
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+lerna-debug.log*
+
+# Local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+*.d.ts.map
+
+# Cursor IDE
+.cursor/mcp.json
+
+# Supabase
+.supabase/
+/supabase/.temp/
+
+# Storybook
+storybook-static/
+
+# Prisma
+/prisma/migrations/*
+!/prisma/migrations/.gitkeep
+
+# npm config files (should not be committed if they contain tokens or local overrides)
+.npmrc
+.npmrc.local
+
+# Caches
+.cache/
+.parcel-cache/
+.nyc_output/
+*.tmp
+*.temp
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# JetBrains IDEs
+.idea/
+*.swp
+*.swo
+*~
+
+# Sublime Text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
+
+# Custom ESLint plugin for 8LYS Stack
+.eslint-plugin-8lys/
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Cursor History Plugin
+.history/
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# turbo
+.turbo
+
+# Generated files
+generated/
+/generated
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Jest
+jest_*
+
+# Changeset temp files
+.changeset/*
+!.changeset/config.json
+!.changeset/README.md
+
+# Temp directories
+tmp/
+temp/
+
+# Auto-generated plugin index
+/src/generated/plugin-index.ts
+
+# Package manager lock files (when not needed)
+# Uncomment the following lines if using multiple package managers
+# package-lock.json
+# yarn.lock
+
+# OS generated files
+.DS_Store?
+Icon?
+._*
+
+# Windows
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# Backup files
+*.backup
+*.bak
+*.swp
+
+# IDE/Editor files
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+
+# 8LYS Stack backup directories
+.8lys-backup/
+
+# Sentry Config File
+.sentryclirc
+
+logs
+dev-debug.log
+# Dependency directories
+# Environment variables
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# OS specific
+
+# Task files
+# tasks.json
+# tasks/ 
+supabase/.branches
