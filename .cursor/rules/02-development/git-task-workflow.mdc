@@ -1,0 +1,296 @@
+---
+description: This rule MUST be followed by the AI agent when working with Task Master tasks to maintain a professional, automated git workflow without requiring user intervention.
+globs: 
+alwaysApply: false
+---
+# Git Task Workflow (Task Master Integration)
+
+This rule MUST be followed by the AI agent when working with Task Master tasks to maintain a professional, automated git workflow without requiring user intervention.
+
+## **Core Workflow Principles (Trunk-Based Development)**
+
+- **ALWAYS** create short-lived feature branches for main tasks (max 1-2 days)
+- **ALWAYS** commit after completing each subtask with descriptive conventional commit messages  
+- **ALWAYS** merge to main via PR after completing the entire main task
+- **MAIN BRANCH** is bleeding edge but deployable (eternal beta state)
+- **DEV RELEASES** are published automatically on merge to main (bleeding edge packages)
+- **STABLE RELEASES** are published manually via git tags when main stabilizes (rock solid)
+- **NEVER** merge AND tag in the same operation - these are separate workflow triggers
+- **HOTFIXES** to main require manual package publishing or emergency workflow
+- **NEVER** ask the user about git operations - handle them professionally and automatically
+- **ALWAYS** leverage lefthook's pre-commit hooks to ensure code quality before commits
+
+## **Branch Management**
+
+### **Branch Creation (Main Tasks Only)**
+```bash
+# When starting a new main task (e.g., Task 54)
+git checkout -b task/54-migrate-to-lefthook
+git push -u origin task/54-migrate-to-lefthook
+```
+
+**Branch Naming Convention:**
+- Format: `task/{task-id}-{brief-description}`
+- Use kebab-case for descriptions
+- Keep descriptions under 50 characters
+- Examples:
+  - `task/54-migrate-to-lefthook`
+  - `task/55-implement-auth-system`
+  - `task/41-configuration-migration`
+
+### **No Branches for Subtasks**
+- Subtasks work within the main task branch
+- Each subtask gets its own commit
+- This maintains clean git history while tracking granular progress
+
+## **Commit Strategy**
+
+### **ALWAYS Organize Changes into Small Logical Commits**
+- **NEVER** create large monolithic commits that mix multiple concerns
+- **ALWAYS** break complex work into logical, atomic commits
+- **EACH COMMIT** should represent one logical change or step
+- **PREFER** 5-10 small commits over 1 large commit
+- **ORGANIZE** by type of change (structure → content → tests → docs)
+
+**Example of Good Logical Organization:**
+```bash
+# Instead of one large commit, break into logical steps:
+feat(rules): create new rule directory structure        # Structure first
+feat(rules): add context bundles for simplified loading # Core feature
+refactor(rules): reorganize existing rules by category  # Reorganization  
+docs(rules): update README with new structure          # Documentation
+feat(rules): remove outdated framework references     # Cleanup
+```
+
+**Benefits of Small Logical Commits:**
+- **Easier Code Review**: Each commit focuses on one concern
+- **Better Git History**: Clear progression of development
+- **Simplified Debugging**: Easy to identify which change caused issues
+- **Cleaner Reverts**: Can revert specific changes without affecting others
+- **Professional Standards**: Demonstrates thoughtful development approach
+
+**Logical Organization Patterns:**
+1. **Structure First**: Directory changes, file moves, basic setup
+2. **Core Implementation**: Main feature or functionality
+3. **Integration**: Connecting components, updating imports
+4. **Testing**: Adding or updating tests
+5. **Documentation**: README updates, comments, guides
+6. **Cleanup**: Removing old files, fixing formatting
+
+### **When to Commit**
+1. **After completing each subtask** - Commit immediately when marking subtask as "done"
+2. **After significant progress on a subtask** - If implementation is complex, commit logical chunks
+3. **Before switching contexts** - Always commit work in progress with appropriate WIP prefix
+4. **When completing logical units** - Structure changes, then content, then tests, then docs
+
+### **Commit Message Format (Conventional Commits)**
+All commit messages MUST follow conventional commit format (enforced by lefthook):
+
+**Subtask Completion Commits:**
+```bash
+feat(task-54): complete subtask 54.1 - remove husky dependencies
+
+- Remove husky and lint-staged from package.json files
+- Delete .husky directories from templates
+- Clean up prepare scripts causing git repo errors
+- Resolves subtask 54.1
+
+Co-authored-by: Task-Master-AI
+```
+
+**Work in Progress Commits:**
+```bash
+wip(task-54): partial implementation of subtask 54.2
+
+- Add lefthook dependency to package.json
+- Create initial lefthook.yml configuration
+- Still working on: pre-push hooks and commit-msg validation
+```
+
+**Convention Types:**
+- `feat`: New features or capabilities
+- `fix`: Bug fixes
+- `refactor`: Code restructuring without functional changes
+- `docs`: Documentation updates
+- `test`: Adding or updating tests
+- `chore`: Maintenance tasks, dependency updates
+- `perf`: Performance improvements
+- `style`: Code formatting, semicolons, etc.
+- `wip`: Work in progress (for partial implementations)
+
+### **Commit Body Structure**
+```
+type(scope): brief description
+
+Detailed explanation of changes:
+- Specific change 1
+- Specific change 2
+- Specific change 3
+
+Additional context:
+- Why this approach was chosen
+- Any challenges overcome
+- References to related tasks/issues
+
+Resolves subtask X.Y
+Co-authored-by: Task-Master-AI
+```
+
+## **Automated Git Commands**
+
+### **Starting a New Main Task**
+```bash
+# 1. Ensure clean working directory
+git status
+git stash push -m "WIP: stashing before task switch" # if needed
+
+# 2. Switch to main and pull latest
+git checkout main
+git pull origin main
+
+# 3. Create and switch to task branch
+git checkout -b task/{task-id}-{description}
+git push -u origin task/{task-id}-{description}
+
+# 4. Update Task Master status
+# (Use Task Master tools to mark task as "in-progress")
+```
+
+### **Completing a Subtask**
+```bash
+# 1. Stage all relevant changes
+git add .
+
+# 2. Commit with conventional message
+git commit -m "feat(task-{id}): complete subtask {id}.{subtask} - {description}
+
+{detailed_body_with_bullet_points}
+
+Resolves subtask {id}.{subtask}
+Co-authored-by: Task-Master-AI"
+
+# 3. Push to remote branch
+git push origin task/{task-id}-{description}
+
+# 4. Update Task Master status
+# (Use Task Master tools to mark subtask as "done")
+```
+
+### **Completing a Main Task**
+```bash
+# 1. Ensure all subtasks are committed
+git status # should be clean
+
+# 2. Final commit if needed
+git commit -m "feat(task-{id}): complete {task-title}
+
+Summary of all work completed:
+- Subtask {id}.1: {description}
+- Subtask {id}.2: {description}
+- Subtask {id}.3: {description}
+
+This completes the implementation of {task-title}.
+All quality checks passing via lefthook pre-commit hooks.
+
+Resolves task {id}
+Co-authored-by: Task-Master-AI"
+
+# 3. Switch to main and merge
+git checkout main
+git pull origin main
+git merge --no-ff task/{task-id}-{description} -m "Merge task/{task-id}-{description}
+
+Complete implementation of {task-title}
+
+- All subtasks completed and tested
+- Code quality verified via lefthook hooks  
+- Ready for production deployment"
+
+# 4. Push main and clean up
+git push origin main
+git branch -d task/{task-id}-{description}
+git push origin --delete task/{task-id}-{description}
+
+# 5. Update Task Master status
+# (Use Task Master tools to mark task as "done")
+```
+
+## **Quality Assurance Integration**
+
+### **Leveraging Lefthook Pre-Commit Hooks**
+- **ALWAYS** rely on lefthook to catch issues before commits
+- **NEVER** bypass lefthook with `--no-verify` unless absolutely necessary
+- **ALWAYS** fix issues caught by hooks before proceeding
+- **TRUST** the pre-commit checks for TypeScript, ESLint, Prettier, and tests
+
+### **Handling Pre-Commit Hook Failures**
+```bash
+# If lefthook catches issues:
+# 1. Review and fix the reported issues
+# 2. Stage the fixes
+git add .
+# 3. Retry the commit (lefthook runs automatically)
+git commit -m "same message as before"
+```
+
+## **Error Handling and Recovery**
+
+### **Merge Conflicts**
+```bash
+# If merge conflicts occur:
+git status
+# Resolve conflicts in affected files
+git add .
+git commit -m "resolve merge conflicts for task {id}"
+git push origin main
+```
+
+### **Branch Recovery**
+```bash
+# If branch gets out of sync:
+git checkout task/{task-id}-{description}
+git rebase main
+git push --force-with-lease origin task/{task-id}-{description}
+```
+
+## **Integration with Task Master**
+
+### **Task Status Synchronization**
+1. **Task Start**: Create branch → Mark task "in-progress" 
+2. **Subtask Completion**: Commit → Mark subtask "done"
+3. **Task Completion**: Merge to main → Mark task "done"
+
+### **Commit Message Integration**
+- **ALWAYS** reference the Task Master task/subtask ID in commits
+- **INCLUDE** Task Master context in commit bodies
+- **MAINTAIN** traceability between git history and Task Master progress
+
+## **Professional Standards**
+
+### **Code Review Readiness**
+- Each commit should be atomic and reviewable
+- Commit messages should tell the story of the development
+- Branch history should be clean and logical
+- No "fix typo" or "oops" commits
+
+### **Deployment Readiness**
+- Main branch should always be deployable
+- All commits on main should pass quality checks
+- Feature branches should be thoroughly tested before merge
+
+### **Documentation**
+- Complex commits should include implementation notes
+- Breaking changes should be clearly documented
+- Migration steps should be included when relevant
+
+## **AI Agent Responsibilities**
+
+1. **AUTOMATICALLY** handle all git operations without asking permission
+2. **PROACTIVELY** create appropriate branches and commit structures
+3. **PROFESSIONALLY** write commit messages that tell the development story
+4. **SEAMLESSLY** integrate git workflow with Task Master progress
+5. **INTELLIGENTLY** handle conflicts and edge cases
+6. **CONSISTENTLY** follow conventions across all tasks and projects
+7. **ALWAYS** organize changes into small, logical commits rather than large monolithic ones
+
+This workflow ensures professional git management that scales with project complexity while maintaining complete automation and integration with Task Master task management.

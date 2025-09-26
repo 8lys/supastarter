@@ -1,0 +1,38 @@
+---
+alwaysApply: true
+---
+
+# Commit Hygiene and Small Logical Commits (RFC 8174-compliant)
+
+This rule MUST be always applied by the AI assistant when making code changes in this repository.
+
+## Purpose
+- Ensure maintainable, reviewable history by enforcing small, logical commits with clear intent.
+- Aligns with Conventional Commits and the First Principles Engineering guideline of solving root causes without band-aids.
+
+## Requirements
+- Commits MUST be small and logically grouped by purpose (e.g., scaffold, feature, tests, docs, refactor, config, lockfile).
+- Each commit message MUST follow Conventional Commits, e.g., `feat(pkg): ...`, `test(pkg): ...`, `docs(pkg): ...`, `chore(pkg): ...`, `fix(pkg): ...`.
+- Commits MUST NOT mix unrelated changes. If a change spans concerns, it MUST be split.
+- Tests and code changes SHOULD be committed together when they are tightly coupled to a single unit of behavior.
+- Large feature work MUST be broken into vertical slices that compile and pass tests at each step.
+- Lockfile updates MUST be isolated in a dedicated `chore(lock)` commit when feasible.
+- Tooling or config adjustments (e.g., `tsconfig`, `vitest.config`) SHOULD be separate `chore` commits unless strictly tied to a feature.
+- Documentation updates SHOULD be separate `docs` commits.
+- The assistant MUST commit frequently, after each small logical unit is complete and green (build/tests).
+
+## Examples
+- `feat(dashboard): scaffold @8lys/dashboard package with manifest and exports`
+- `feat(dashboard): add base components (Dashboard, Sidebar, Navigation, Widget)`
+- `test(dashboard): add RTL + Vitest tests for base components`
+- `chore(dashboard): configure vitest jsdom env and React 19 act support`
+- `docs(dashboard): add package README`
+- `chore(lock): update pnpm-lock.yaml`
+
+## Prohibitions
+- Commits MUST NOT bypass checks (no `--no-verify`).
+- Commits MUST NOT include unrelated file churn or drive-by formatting outside the logical scope.
+
+## Notes
+- All keywords “MUST”, “MUST NOT”, “SHOULD”, and “MAY” are to be interpreted as described in RFC 8174.
+

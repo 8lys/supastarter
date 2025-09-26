@@ -1,0 +1,91 @@
+---
+alwaysApply: true
+---
+
+## First-Principles Troubleshooting & Root-Cause Analysis (RFC 8174-compliant)
+
+This rule MUST be followed whenever diagnosing errors, build/test failures, flaky behavior, or unexpected output. It encodes a first-principles approach: identify and fix the root cause, consult official documentation before proposing changes, and verify with focused commands.
+
+### Core Principles
+- **Root Cause First**: You MUST identify the underlying cause before proposing a fix. Avoid band-aids.
+- **Docs-Driven**: You MUST consult the official docs for involved tools before attempting a solution. Use the links collected in `../05-reference/current-stack.mdc`.
+- **Small, Verifiable Steps**: You MUST reproduce with the minimal command, fix, and re-verify. No shotgun debugging.
+- **No Bypasses**: You MUST NOT use flags that skip checks (e.g., `--no-verify`, `--skip-ci`). Fix the cause.
+
+### Standard Operating Procedure (SOP)
+1. Capture the failure
+   - Record the exact command, error output, stack traces, and environment (package path, Node/pnpm versions).
+   - Classify scope: lint | type-check | test | build | runtime | tooling.
+
+2. Reproduce minimally
+   - Run at the failing package boundary:
+     - `pnpm --filter <pkg> run lint|test|build|type-check`
+     - Or `pnpm -C packages/<pkg> <script>`
+   - Eliminate watchers: prefer non-watch modes (e.g., `vitest run`).
+
+3. Identify the failing layer
+   - Monorepo hook vs package script vs tool invocation.
+   - Example: Pre-push hooks calling workspace `quality:check` vs package `lint`.
+
+4. Read the docs (before changing code)
+   - Use `../05-reference/current-stack.mdc` for doc links (Next.js, ESLint, Vitest, pnpm, TypeScript, Lefthook, etc.).
+   - Confirm current tool versions and breaking changes (e.g., ESLint v9 flat config requirements).
+
+5. Diagnose root cause categories
+   - Version/compatibility mismatch (tooling major bumps, config format changes)
+   - Mis-scoped script (root calling tool that expects per-package config)
+   - Environment inconsistency (CI vs local, missing env vars, stuck watch processes)
+   - Configuration defect (wrong paths, missing files, invalid schema)
+   - Code defect (types/tests/build errors)
+
+6. Design the fix (no workarounds)
+   - Align versions/configs to documented requirements.
+   - Scope fixes narrowly (e.g., route `lint` to per-package when flat configs are per-package).
+   - Prefer configuration corrections over disabling rules or skipping steps.
+
+7. Verify
+   - Re-run the minimal failing command at package level.
+   - Then run workspace checks that originally failed (e.g., pre-push hook commands).
+   - Ensure green tests/build before committing.
+
+8. Document and commit
+   - Update relevant docs/rules if the issue reveals a recurring pattern.
+   - Commit using Conventional Commits; keep the change small and logically scoped.
+
+### Mandatory Checklists
+
+Root-Cause Triage Checklist
+- [ ] Exact failing command and package identified
+- [ ] Minimal reproduction confirmed without watchers
+- [ ] Related docs consulted (linked via `../05-reference/current-stack.mdc`)
+- [ ] Root cause category determined
+- [ ] Fix plan aligns with docs; no bypass flags
+- [ ] Minimal command green after fix
+- [ ] Workspace checks green
+- [ ] Commit created with clear scope
+
+Anti-Patterns (MUST NOT)
+- `--no-verify`, `--skip-ci`, or disabling checks instead of fixing
+- Guessing changes without reading docs
+- Global workarounds that mask per-package config problems
+- Mixing unrelated changes in one commit
+
+### Common Patterns & Examples
+
+- ESLint v9 flat config errors at repo root:
+  - Symptom: “ESLint couldn't find an eslint.config.(js|mjs|cjs) file.”
+  - Root cause: Running ESLint at the repository root while configs exist only per package.
+  - Fix: Route root lint to per-package lint scripts (do not bypass). Example: `"lint": "pnpm -r run lint --if-present"`.
+
+- Vitest “waiting” or hangs:
+  - Symptom: Watch mode keeps the process open.
+  - Root cause: Running `vitest` without `run` in automation contexts.
+  - Fix: Use `pnpm exec vitest run` at the package level; avoid watchers in hooks/CI.
+
+- Recursive workspace commands hide the failing package:
+  - Approach: Narrow with `pnpm --filter` or `pnpm -C` to isolate the failing package before changing configs.
+
+### References
+- See [First Principles Engineering](../00-core/first-principles-engineering.mdc) for non-negotiable engineering standards.
+- See [Commit Hygiene](commit-hygiene.mdc) for commit practices.
+- See [Git Task Workflow](git-task-workflow.mdc) for git workflow.
