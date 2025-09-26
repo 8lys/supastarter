@@ -2,6 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import type { UnifiedServerAuthApi, AuthResult, AuthUser, AuthSession } from "../../types";
 import { toAuthErrorFromSupabase } from "../../lib/errors";
+import { mapSupabaseUserToAuthUser } from "./map";
 
 export const serverAuth: UnifiedServerAuthApi = {
     async getSession() {
@@ -35,16 +36,7 @@ export const serverAuth: UnifiedServerAuthApi = {
             if (error) return { data: undefined, error: toAuthErrorFromSupabase(error) } as AuthResult<null>;
             if (!user) return { data: null, error: undefined } as AuthResult<null>;
 
-            const appUser: AuthUser = {
-                id: user.id,
-                email: user.email ?? "",
-                name: user.user_metadata?.name ?? null,
-                imageUrl: user.user_metadata?.avatar_url ?? null,
-                username: user.user_metadata?.username ?? null,
-                role: (user.app_metadata?.role as AuthUser["role"]) ?? null,
-                onboardingComplete: user.user_metadata?.onboardingComplete ?? undefined,
-                locale: user.user_metadata?.locale ?? null,
-            };
+            const appUser: AuthUser = mapSupabaseUserToAuthUser(user);
 
             // Session payload
             const sess: AuthSession = {
@@ -62,5 +54,8 @@ export const serverAuth: UnifiedServerAuthApi = {
         }
     },
 };
+
+export * from "./client";
+export * from "./middleware";
 
 
