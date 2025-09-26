@@ -7,7 +7,6 @@ function getBearerToken(c: Context): string | undefined {
     if (auth && auth.toLowerCase().startsWith("bearer ")) {
         return auth.slice(7).trim();
     }
-    // Fallback to access token cookie if present
     const cookie = c.req.header("cookie") || "";
     const match = cookie
         .split(/;\s*/)
@@ -17,7 +16,7 @@ function getBearerToken(c: Context): string | undefined {
     return undefined;
 }
 
-export const supabaseAuthMiddleware = createMiddleware(async (c, next) => {
+export const authMiddleware = createMiddleware(async (c, next) => {
     const token = getBearerToken(c);
     if (!token) {
         return c.json({ error: "Unauthorized" }, 401);
