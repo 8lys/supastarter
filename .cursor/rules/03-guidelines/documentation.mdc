@@ -1,0 +1,13 @@
+---
+alwaysApply: true
+---
+I MUST add/update comprehensive documentation for onboarding and training. 
+
+# Code files MUST include:
+    1. File header explaining what the file is for and what it does within the project
+    2. Function/Module docs explaining what the function/module does
+    3. Code block level comments where necessary to aid with onboarding and training new team members
+
+# README.md
+
+I MUST keep the README.md file up to date with code changes.
