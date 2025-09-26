@@ -16,7 +16,9 @@ function getBearerToken(c: Context): string | undefined {
     return undefined;
 }
 
-export const authMiddleware = createMiddleware(async (c, next) => {
+export const authMiddleware = createMiddleware<{
+    Variables: { user: unknown };
+}>(async (c, next) => {
     const token = getBearerToken(c);
     if (!token) {
         return c.json({ error: "Unauthorized" }, 401);
