@@ -1,0 +1,11 @@
+# Task ID: 11
+# Title: Replace API (Hono) guards to use provider middleware
+# Status: pending
+# Dependencies: 5
+# Priority: medium
+# Description: Replace session validation in packages/api/src/middleware/* to import from @repo/auth/hono (provider-specific under the hood). Keep admin role checks.
+# Details:
+
+
+# Test Strategy:
+

@@ -1,0 +1,43 @@
+# Task ID: 2
+# Title: Standardize unified auth API surface (types, methods, errors)
+# Status: pending
+# Dependencies: 1
+# Priority: high
+# Description: Define provider-agnostic API: auth.api.getSession, authClient.signUp/email/signIn/magicLink/signOut/getSession, organization.acceptInvitation; unify User/Session/AuthError shapes; unify { data, error } results with stable error codes.
+# Details:
+
+
+# Test Strategy:
+
+
+# Subtasks:
+## 1. Define common User and Session interfaces [pending]
+### Dependencies: None
+### Description: Create standardized interfaces for User and Session objects that will work across all auth providers. Ensure these interfaces contain all necessary fields while abstracting provider-specific details.
+### Details:
+Define TypeScript interfaces for User (id, email, name, etc.) and Session (user, token, expiresAt, etc.) that can be implemented by both Better-Auth and Supabase. Consider existing usage patterns in the application to ensure backward compatibility. Include proper JSDoc comments for all interface properties.
+
+## 2. Define AuthError types and error code system [pending]
+### Dependencies: None
+### Description: Create a unified error handling system with consistent error codes that work across providers. Define the AuthError class structure and standardize error codes for common auth failures.
+### Details:
+Design an AuthError class with properties for code, message, and optional cause. Create an enum of stable error codes (e.g., INVALID_CREDENTIALS, EMAIL_NOT_VERIFIED, SESSION_EXPIRED) that will remain consistent regardless of the underlying provider. Map provider-specific errors to these standardized codes. Document each error code with expected scenarios and recommended user-facing messages.
+
+## 3. Standardize auth API method signatures [pending]
+### Dependencies: 2.1, 2.2
+### Description: Define consistent method signatures for all auth operations including signUp, signIn, signOut, getSession, and organization-related methods that will work across providers.
+### Details:
+Create TypeScript interface definitions for all auth methods: auth.api.getSession, authClient.signUp, authClient.signInWithEmail, authClient.signInWithMagicLink, authClient.signOut, authClient.getSession, organization.acceptInvitation, etc. Ensure parameters and return types are consistent and use the User/Session interfaces and error handling patterns defined earlier. Document each method with JSDoc comments including parameters, return values, and possible errors.
+
+## 4. Implement unified result pattern with { data, error } [pending]
+### Dependencies: 2.2, 2.3
+### Description: Create a standardized result envelope pattern that returns { data, error } for all auth operations, ensuring consistent error handling across the application.
+### Details:
+Define a generic AuthResult<T> type that follows the { data?: T, error?: AuthError } pattern. Update all API method signatures to return this type. Create utility functions for creating success and error results. Ensure the pattern handles null/undefined cases properly and provides type safety. Document best practices for consuming these results in application code.
+
+## 5. Document the unified auth API contract [pending]
+### Dependencies: 2.1, 2.2, 2.3, 2.4
+### Description: Create comprehensive documentation for the standardized auth API including interfaces, methods, error codes, and usage examples to serve as the contract for implementations.
+### Details:
+Produce detailed documentation covering: 1) All User/Session interface properties, 2) Complete list of error codes with explanations, 3) Method signatures with parameters and return types, 4) Usage examples for common flows (signup, login, etc.), 5) Guidelines for error handling, and 6) Migration notes for updating existing code. Include diagrams showing the relationship between components and the authentication flow.
+

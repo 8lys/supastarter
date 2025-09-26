@@ -1,0 +1,11 @@
+# Task ID: 17
+# Title: Remove dead code and legacy auth tables post-switch
+# Status: pending
+# Dependencies: 5, 15
+# Priority: medium
+# Description: After provider switch and PK migration, remove Better Auth-only tables (Session, Account, Passkey, TwoFactor) and unused code paths, following commit hygiene rules.
+# Details:
+
+
+# Test Strategy:
+

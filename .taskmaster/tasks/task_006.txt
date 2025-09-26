@@ -1,0 +1,11 @@
+# Task ID: 6
+# Title: Adapt apps/web middleware to provider helper and preserve cookies
+# Status: pending
+# Dependencies: 4, 5
+# Priority: medium
+# Description: Update apps/web/middleware.ts to use @repo/auth middleware helper first; maintain existing redirects and always return/copy the response including Supabase cookies.
+# Details:
+
+
+# Test Strategy:
+

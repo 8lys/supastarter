@@ -1,0 +1,37 @@
+# Task ID: 16
+# Title: Author ADR for auth provider architecture and migration
+# Status: pending
+# Dependencies: 1, 2
+# Priority: medium
+# Description: Document architectural decision for unified auth surface and provider switch, trade-offs (Better Auth vs Supabase), migration plan, and rollback strategy.
+# Details:
+
+
+# Test Strategy:
+
+
+# Subtasks:
+## 1. Draft problem statement and context section [pending]
+### Dependencies: None
+### Description: Document the current auth situation, challenges, and business drivers for change. Include limitations of current approach and goals for the new architecture.
+### Details:
+Include background on current auth implementation, pain points, and specific requirements that led to considering a provider switch. Document business and technical drivers for the decision.
+
+## 2. Analyze auth provider options with trade-offs [pending]
+### Dependencies: 16.1
+### Description: Compare Better Auth vs Supabase vs potential hybrid approaches with detailed pros/cons analysis for each option.
+### Details:
+For each option (Better Auth, Supabase, hybrid), document features, limitations, integration complexity, maintenance overhead, security considerations, cost implications, and developer experience. Create a comparison matrix with decision criteria.
+
+## 3. Document selected solution and implementation plan [pending]
+### Dependencies: 16.2
+### Description: Detail the chosen auth provider architecture with justification and comprehensive migration strategy.
+### Details:
+Clearly state the selected approach with rationale tied to decision criteria. Outline migration phases, timeline, resource requirements, testing strategy, and user communication plan. Reference related tasks (1, 5, 8, 15) in the implementation plan.
+
+## 4. Define monitoring and rollback strategy [pending]
+### Dependencies: 16.3
+### Description: Document how to monitor the migration success and detailed rollback procedures if issues arise.
+### Details:
+Specify key metrics to monitor during and after migration, acceptable thresholds, and warning signs. Create step-by-step rollback procedures for different failure scenarios. Include data integrity considerations and communication plans for rollback situations.
+

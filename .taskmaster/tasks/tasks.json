@@ -1,0 +1,588 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Add provider switch structure under packages/auth/providers",
+        "description": "Create providers folder with better-auth and supabase subfolders. Prepare provider-specific entrypoints (index.ts, client.ts, middleware.ts, hono.ts).",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create provider folder structure",
+            "description": "Create the providers folder under packages/auth with better-auth and supabase subfolders",
+            "dependencies": [],
+            "details": "Create the following folder structure:\n- packages/auth/providers/\n  - better-auth/\n  - supabase/",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Set up Better Auth provider entrypoint files",
+            "description": "Create the necessary entrypoint files for the Better Auth provider",
+            "dependencies": [],
+            "details": "Create the following files in packages/auth/providers/better-auth/:\n- index.ts (main exports)\n- client.ts (browser client implementation)\n- middleware.ts (Next.js middleware helper)\n- hono.ts (Hono middleware implementation)",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Set up Supabase provider entrypoint files",
+            "description": "Create the necessary entrypoint files for the Supabase provider",
+            "dependencies": [],
+            "details": "Create the following files in packages/auth/providers/supabase/:\n- index.ts (main exports)\n- client.ts (browser client implementation)\n- middleware.ts (Next.js middleware helper)\n- hono.ts (Hono middleware implementation)",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Standardize unified auth API surface (types, methods, errors)",
+        "description": "Define provider-agnostic API: auth.api.getSession, authClient.signUp/email/signIn/magicLink/signOut/getSession, organization.acceptInvitation; unify User/Session/AuthError shapes; unify { data, error } results with stable error codes.",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [
+          1
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define common User and Session interfaces",
+            "description": "Create standardized interfaces for User and Session objects that will work across all auth providers. Ensure these interfaces contain all necessary fields while abstracting provider-specific details.",
+            "dependencies": [],
+            "details": "Define TypeScript interfaces for User (id, email, name, etc.) and Session (user, token, expiresAt, etc.) that can be implemented by both Better-Auth and Supabase. Consider existing usage patterns in the application to ensure backward compatibility. Include proper JSDoc comments for all interface properties.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Define AuthError types and error code system",
+            "description": "Create a unified error handling system with consistent error codes that work across providers. Define the AuthError class structure and standardize error codes for common auth failures.",
+            "dependencies": [],
+            "details": "Design an AuthError class with properties for code, message, and optional cause. Create an enum of stable error codes (e.g., INVALID_CREDENTIALS, EMAIL_NOT_VERIFIED, SESSION_EXPIRED) that will remain consistent regardless of the underlying provider. Map provider-specific errors to these standardized codes. Document each error code with expected scenarios and recommended user-facing messages.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Standardize auth API method signatures",
+            "description": "Define consistent method signatures for all auth operations including signUp, signIn, signOut, getSession, and organization-related methods that will work across providers.",
+            "dependencies": [
+              "2.1",
+              "2.2"
+            ],
+            "details": "Create TypeScript interface definitions for all auth methods: auth.api.getSession, authClient.signUp, authClient.signInWithEmail, authClient.signInWithMagicLink, authClient.signOut, authClient.getSession, organization.acceptInvitation, etc. Ensure parameters and return types are consistent and use the User/Session interfaces and error handling patterns defined earlier. Document each method with JSDoc comments including parameters, return values, and possible errors.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Implement unified result pattern with { data, error }",
+            "description": "Create a standardized result envelope pattern that returns { data, error } for all auth operations, ensuring consistent error handling across the application.",
+            "dependencies": [
+              "2.2",
+              "2.3"
+            ],
+            "details": "Define a generic AuthResult<T> type that follows the { data?: T, error?: AuthError } pattern. Update all API method signatures to return this type. Create utility functions for creating success and error results. Ensure the pattern handles null/undefined cases properly and provides type safety. Document best practices for consuming these results in application code.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Document the unified auth API contract",
+            "description": "Create comprehensive documentation for the standardized auth API including interfaces, methods, error codes, and usage examples to serve as the contract for implementations.",
+            "dependencies": [
+              "2.1",
+              "2.2",
+              "2.3",
+              "2.4"
+            ],
+            "details": "Produce detailed documentation covering: 1) All User/Session interface properties, 2) Complete list of error codes with explanations, 3) Method signatures with parameters and return types, 4) Usage examples for common flows (signup, login, etc.), 5) Guidelines for error handling, and 6) Migration notes for updating existing code. Include diagrams showing the relationship between components and the authentication flow.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Implement Better Auth provider under providers/better-auth",
+        "description": "Move current Better Auth files under providers/better-auth and adapt to unified API surface.",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [
+          1,
+          2
+        ],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Move Better Auth files to providers/better-auth",
+            "description": "Relocate all existing Better Auth implementation files to the new location under packages/auth/providers/better-auth",
+            "dependencies": [],
+            "details": "Identify all Better Auth files in the current location and move them to the new directory structure. Ensure imports/exports are updated accordingly to maintain functionality.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Adapt server-side API to unified interface",
+            "description": "Modify the server-side Better Auth implementation to conform to the standardized API surface defined in Task 2",
+            "dependencies": [],
+            "details": "Update server-side methods to match the unified auth.api.getSession signature. Ensure error handling and return types match the unified { data, error } pattern with consistent error codes.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Adapt client-side methods to unified interface",
+            "description": "Refactor client-side Better Auth methods to match the unified auth client API",
+            "dependencies": [],
+            "details": "Update client methods to match the standardized signUp, signIn, magicLink, signOut, and getSession methods. Transform the User and Session shapes to match the unified types. Implement the organization.acceptInvitation method if applicable.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Implement middleware adapters for Better Auth",
+            "description": "Create middleware helpers for Next.js and Hono that work with Better Auth",
+            "dependencies": [],
+            "details": "Develop middleware.ts and hono.ts adapters that expose the Better Auth functionality through the unified middleware interface. Ensure proper cookie handling and session management consistent with the unified API.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Implement Supabase provider (SSR/browser/middleware/Hono)",
+        "description": "Use @supabase/ssr for SSR (cookies.getAll/setAll only), create browser client, Next.js middleware helper, and Hono middleware. Map methods to unified API.",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [
+          1,
+          2
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set up SSR integration with @supabase/ssr",
+            "description": "Implement server-side rendering integration using @supabase/ssr package, focusing only on cookies.getAll and cookies.setAll functionality",
+            "dependencies": [],
+            "details": "Create a server-side client that uses @supabase/ssr for cookie management. Implement functions to handle cookie retrieval (getAll) and setting (setAll) while ensuring compatibility with the unified API surface. This should be implemented in the providers/supabase directory.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Create browser client implementation",
+            "description": "Develop a browser-side Supabase client that implements the unified auth API surface",
+            "dependencies": [
+              "4.1"
+            ],
+            "details": "Implement client-side authentication methods including signUp, signIn with email, magic link authentication, signOut, and getSession. Ensure the implementation follows the unified API contract with standardized { data, error } response format and proper error handling.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Develop Next.js middleware helper",
+            "description": "Create a Next.js middleware helper that integrates with Supabase authentication",
+            "dependencies": [
+              "4.1"
+            ],
+            "details": "Implement a middleware function for Next.js that validates authentication state, handles session refresh, and returns a mutated response. The middleware should be compatible with the unified API surface and properly manage Supabase cookies.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Create Hono middleware for Supabase",
+            "description": "Implement Hono middleware that supports both cookie-based and bearer token authentication for Supabase",
+            "dependencies": [
+              "4.1"
+            ],
+            "details": "Develop middleware for Hono that extracts authentication information from either cookies or bearer tokens. Ensure proper session validation and refresh mechanisms. The middleware should follow the same patterns as the Next.js middleware but adapted for the Hono framework.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Map Supabase methods to unified API",
+            "description": "Create adapter functions that map Supabase-specific methods and responses to the standardized unified API",
+            "dependencies": [
+              "4.1",
+              "4.2"
+            ],
+            "details": "Implement mapping functions that transform Supabase-specific method calls, responses, and error formats to match the unified API contract. This includes standardizing User and Session objects, error codes, and ensuring consistent behavior across all authentication operations.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Implement Supabase-specific cookie management",
+            "description": "Create utilities for handling Supabase authentication cookies across different environments",
+            "dependencies": [
+              "4.1",
+              "4.3",
+              "4.4"
+            ],
+            "details": "Develop cookie management utilities specific to Supabase that handle setting, retrieving, and clearing authentication cookies. Implement proper security measures for cookies including appropriate flags (HttpOnly, SameSite, Secure). Ensure consistent cookie behavior across SSR, client-side, and middleware contexts.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Wire package re-exports for provider switching (index.ts, client.ts)",
+        "description": "Make packages/auth/index.ts and packages/auth/client.ts re-export from chosen provider (one-line export), mirroring database switch pattern.",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [
+          3,
+          4
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement provider selection logic",
+            "description": "Create logic to select the appropriate auth provider based on environment variables, mirroring the database switch pattern",
+            "dependencies": [],
+            "details": "Implement a mechanism in packages/auth that reads environment variables to determine which provider (better-auth or supabase) should be used. This should follow the same pattern used in the database package for provider switching.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Set up re-export files for dynamic imports",
+            "description": "Configure index.ts and client.ts to re-export from the selected provider using one-line exports",
+            "dependencies": [
+              "5.1"
+            ],
+            "details": "Create or modify packages/auth/index.ts and packages/auth/client.ts to dynamically import and re-export all necessary functions, types, and classes from the provider selected by the logic implemented in subtask 5.1. Each file should contain a single export statement that forwards everything from the appropriate provider module.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Test provider switching produces identical app behavior",
+            "description": "Verify switching re-exports between providers retains identical UI/API behavior across key flows.",
+            "details": "",
+            "status": "pending",
+            "dependencies": [],
+            "parentTaskId": 5
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Adapt apps/web middleware to provider helper and preserve cookies",
+        "description": "Update apps/web/middleware.ts to use @repo/auth middleware helper first; maintain existing redirects and always return/copy the response including Supabase cookies.",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [
+          4,
+          5
+        ],
+        "priority": "medium",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Map auth client methods in UI forms to unified API",
+        "description": "Ensure LoginForm/SignupForm/SessionProvider and related hooks use @repo/auth/client methods that are provider-agnostic; keep error.code handling stable.",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [
+          5,
+          6
+        ],
+        "priority": "medium",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "Add Supabase env variables and configuration docs",
+        "description": "Document NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, SUPABASE_SERVICE_ROLE_KEY, and any provider toggle env. Update README/setup docs.",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [
+          4
+        ],
+        "priority": "low",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "RLS policies and indexes verification for app tables",
+        "description": "Ensure RLS policies are defined per operation with auth.uid() and necessary indexes exist. Use declarative schema and rules.",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Audit existing tables for RLS policies",
+            "description": "Review all application tables to verify they have appropriate Row Level Security policies that use auth.uid() for user-specific access control.",
+            "dependencies": [],
+            "details": "Create a comprehensive list of all tables in the database schema. For each table, document existing RLS policies, noting whether they properly use auth.uid() for authentication. Flag any tables missing RLS policies or using incorrect authentication methods. Pay special attention to tables with sensitive data.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement missing or correct existing RLS policies",
+            "description": "Create or modify RLS policies to ensure each operation type (SELECT, INSERT, UPDATE, DELETE) has separate policies using auth.uid() for proper authorization.",
+            "dependencies": [
+              "10.1"
+            ],
+            "details": "Based on the audit results, write declarative schema definitions for missing RLS policies. Ensure each operation type has its own policy rather than using ALL. Follow the pattern: CREATE POLICY \"policy_name\" ON table_name FOR operation TO authenticated USING (auth.uid() = user_id). Document any special cases where different policy logic is required.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Add necessary indexes to support RLS queries",
+            "description": "Identify and create indexes on columns referenced in RLS policies to ensure efficient query performance when policies are applied.",
+            "dependencies": [
+              "10.2"
+            ],
+            "details": "Review all RLS policies to identify columns used in policy conditions (especially foreign keys and user_id columns). Create appropriate indexes on these columns if they don't already exist. Test query performance with EXPLAIN ANALYZE before and after index creation to verify improvements. Document all indexes in the schema definition files.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Replace API (Hono) guards to use provider middleware",
+        "description": "Replace session validation in packages/api/src/middleware/* to import from @repo/auth/hono (provider-specific under the hood). Keep admin role checks.",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [
+          5
+        ],
+        "priority": "medium",
+        "subtasks": []
+      },
+      {
+        "id": 12,
+        "title": "QA: flows (signup, login, magic link, OAuth, signout)",
+        "description": "Manual/automated checks that flows work with both providers via switch; update Playwright tests if needed.",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [
+          5,
+          6,
+          7
+        ],
+        "priority": "medium",
+        "subtasks": []
+      },
+      {
+        "id": 13,
+        "title": "QA: org invitations and seat updates (provider-agnostic)",
+        "description": "Test invitation acceptance/removal flows trigger seat update hooks regardless of provider.",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [
+          5
+        ],
+        "priority": "medium",
+        "subtasks": []
+      },
+      {
+        "id": 14,
+        "title": "QA: billing redirects and activeOrganization logic",
+        "description": "Verify org routing and paywall redirects keep working; ensure response with Supabase cookies is returned/copies in redirects.",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [
+          6
+        ],
+        "priority": "medium",
+        "subtasks": []
+      },
+      {
+        "id": 15,
+        "title": "Migrate app user PK to UUID = Supabase auth.users.id",
+        "description": "Perform clean PK migration: change public.user.id to uuid matching auth.users.id, update all FKs, update code, remove legacy auth tables post-migration.",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [
+          4
+        ],
+        "priority": "high",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create database migration plan and schema changes",
+            "description": "Design the database migration plan to change public.user.id from integer to UUID matching auth.users.id, including all schema modifications needed",
+            "dependencies": [],
+            "details": "Create SQL scripts for: 1) Adding a temporary UUID column to public.user table, 2) Creating a mapping table between old IDs and new UUIDs, 3) Schema changes for all tables with foreign keys to user.id, 4) Validation queries to ensure data integrity before and after migration",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Develop data migration scripts with rollback capability",
+            "description": "Create scripts to migrate existing user data to the new UUID format while maintaining referential integrity across all related tables",
+            "dependencies": [
+              "15.1"
+            ],
+            "details": "Implement scripts to: 1) Populate temporary UUID column with values from auth.users.id, 2) Update all foreign key references in related tables, 3) Create comprehensive rollback scripts that can restore the database to its previous state if issues occur, 4) Include data validation checks at each migration step",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Update application code to use UUID primary keys",
+            "description": "Modify all application code that references user.id to work with UUID format instead of integers",
+            "dependencies": [
+              "15.1"
+            ],
+            "details": "1) Identify all code locations that reference user.id, 2) Update database queries, type definitions, and API endpoints, 3) Modify authentication flows to use Supabase auth.users.id, 4) Update any caching mechanisms or serialization that depends on user ID format",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Implement testing strategy for migration",
+            "description": "Create comprehensive test plan to verify data integrity and application functionality before, during, and after migration",
+            "dependencies": [
+              "15.2",
+              "15.3"
+            ],
+            "details": "1) Develop unit tests for updated code paths, 2) Create integration tests for authentication flows, 3) Design database consistency checks to verify all relations are maintained, 4) Prepare test environments that mirror production for migration rehearsal",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Execute migration with monitoring and verification",
+            "description": "Perform the actual migration in staging and production environments with proper monitoring and verification steps",
+            "dependencies": [
+              "15.1",
+              "15.2",
+              "15.3",
+              "15.4"
+            ],
+            "details": "1) Execute migration in staging environment first, 2) Verify all application functionality in staging, 3) Create deployment plan with downtime window for production, 4) Implement real-time monitoring during migration, 5) Execute verification queries post-migration to confirm data integrity",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Clean up legacy authentication tables and finalize migration",
+            "description": "Remove deprecated authentication tables and finalize the migration by removing temporary columns and constraints",
+            "dependencies": [
+              "15.5"
+            ],
+            "details": "1) Identify all legacy authentication tables that can be removed, 2) Create scripts to safely remove these tables after verifying they're no longer needed, 3) Remove temporary columns and constraints added during migration, 4) Update documentation to reflect the new database schema and authentication flow",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "title": "Author ADR for auth provider architecture and migration",
+        "description": "Document architectural decision for unified auth surface and provider switch, trade-offs (Better Auth vs Supabase), migration plan, and rollback strategy.",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [
+          1,
+          2
+        ],
+        "priority": "medium",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Draft problem statement and context section",
+            "description": "Document the current auth situation, challenges, and business drivers for change. Include limitations of current approach and goals for the new architecture.",
+            "dependencies": [],
+            "details": "Include background on current auth implementation, pain points, and specific requirements that led to considering a provider switch. Document business and technical drivers for the decision.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Analyze auth provider options with trade-offs",
+            "description": "Compare Better Auth vs Supabase vs potential hybrid approaches with detailed pros/cons analysis for each option.",
+            "dependencies": [
+              "16.1"
+            ],
+            "details": "For each option (Better Auth, Supabase, hybrid), document features, limitations, integration complexity, maintenance overhead, security considerations, cost implications, and developer experience. Create a comparison matrix with decision criteria.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Document selected solution and implementation plan",
+            "description": "Detail the chosen auth provider architecture with justification and comprehensive migration strategy.",
+            "dependencies": [
+              "16.2"
+            ],
+            "details": "Clearly state the selected approach with rationale tied to decision criteria. Outline migration phases, timeline, resource requirements, testing strategy, and user communication plan. Reference related tasks (1, 5, 8, 15) in the implementation plan.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Define monitoring and rollback strategy",
+            "description": "Document how to monitor the migration success and detailed rollback procedures if issues arise.",
+            "dependencies": [
+              "16.3"
+            ],
+            "details": "Specify key metrics to monitor during and after migration, acceptable thresholds, and warning signs. Create step-by-step rollback procedures for different failure scenarios. Include data integrity considerations and communication plans for rollback situations.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "title": "Remove dead code and legacy auth tables post-switch",
+        "description": "After provider switch and PK migration, remove Better Auth-only tables (Session, Account, Passkey, TwoFactor) and unused code paths, following commit hygiene rules.",
+        "details": "",
+        "testStrategy": "",
+        "status": "pending",
+        "dependencies": [
+          5,
+          15
+        ],
+        "priority": "medium",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-09-25T21:10:26.373Z",
+      "description": "Default tasks context",
+      "updated": "2025-09-25T23:50:57.835Z"
+    }
+  }
+}

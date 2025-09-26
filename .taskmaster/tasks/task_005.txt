@@ -1,0 +1,31 @@
+# Task ID: 5
+# Title: Wire package re-exports for provider switching (index.ts, client.ts)
+# Status: pending
+# Dependencies: 3, 4
+# Priority: high
+# Description: Make packages/auth/index.ts and packages/auth/client.ts re-export from chosen provider (one-line export), mirroring database switch pattern.
+# Details:
+
+
+# Test Strategy:
+
+
+# Subtasks:
+## 1. Implement provider selection logic [pending]
+### Dependencies: None
+### Description: Create logic to select the appropriate auth provider based on environment variables, mirroring the database switch pattern
+### Details:
+Implement a mechanism in packages/auth that reads environment variables to determine which provider (better-auth or supabase) should be used. This should follow the same pattern used in the database package for provider switching.
+
+## 2. Set up re-export files for dynamic imports [pending]
+### Dependencies: 5.1
+### Description: Configure index.ts and client.ts to re-export from the selected provider using one-line exports
+### Details:
+Create or modify packages/auth/index.ts and packages/auth/client.ts to dynamically import and re-export all necessary functions, types, and classes from the provider selected by the logic implemented in subtask 5.1. Each file should contain a single export statement that forwards everything from the appropriate provider module.
+
+## 3. Test provider switching produces identical app behavior [pending]
+### Dependencies: None
+### Description: Verify switching re-exports between providers retains identical UI/API behavior across key flows.
+### Details:
+
+

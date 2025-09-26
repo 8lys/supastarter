@@ -1,0 +1,49 @@
+# Task ID: 15
+# Title: Migrate app user PK to UUID = Supabase auth.users.id
+# Status: pending
+# Dependencies: 4
+# Priority: high
+# Description: Perform clean PK migration: change public.user.id to uuid matching auth.users.id, update all FKs, update code, remove legacy auth tables post-migration.
+# Details:
+
+
+# Test Strategy:
+
+
+# Subtasks:
+## 1. Create database migration plan and schema changes [pending]
+### Dependencies: None
+### Description: Design the database migration plan to change public.user.id from integer to UUID matching auth.users.id, including all schema modifications needed
+### Details:
+Create SQL scripts for: 1) Adding a temporary UUID column to public.user table, 2) Creating a mapping table between old IDs and new UUIDs, 3) Schema changes for all tables with foreign keys to user.id, 4) Validation queries to ensure data integrity before and after migration
+
+## 2. Develop data migration scripts with rollback capability [pending]
+### Dependencies: 15.1
+### Description: Create scripts to migrate existing user data to the new UUID format while maintaining referential integrity across all related tables
+### Details:
+Implement scripts to: 1) Populate temporary UUID column with values from auth.users.id, 2) Update all foreign key references in related tables, 3) Create comprehensive rollback scripts that can restore the database to its previous state if issues occur, 4) Include data validation checks at each migration step
+
+## 3. Update application code to use UUID primary keys [pending]
+### Dependencies: 15.1
+### Description: Modify all application code that references user.id to work with UUID format instead of integers
+### Details:
+1) Identify all code locations that reference user.id, 2) Update database queries, type definitions, and API endpoints, 3) Modify authentication flows to use Supabase auth.users.id, 4) Update any caching mechanisms or serialization that depends on user ID format
+
+## 4. Implement testing strategy for migration [pending]
+### Dependencies: 15.2, 15.3
+### Description: Create comprehensive test plan to verify data integrity and application functionality before, during, and after migration
+### Details:
+1) Develop unit tests for updated code paths, 2) Create integration tests for authentication flows, 3) Design database consistency checks to verify all relations are maintained, 4) Prepare test environments that mirror production for migration rehearsal
+
+## 5. Execute migration with monitoring and verification [pending]
+### Dependencies: 15.1, 15.2, 15.3, 15.4
+### Description: Perform the actual migration in staging and production environments with proper monitoring and verification steps
+### Details:
+1) Execute migration in staging environment first, 2) Verify all application functionality in staging, 3) Create deployment plan with downtime window for production, 4) Implement real-time monitoring during migration, 5) Execute verification queries post-migration to confirm data integrity
+
+## 6. Clean up legacy authentication tables and finalize migration [pending]
+### Dependencies: 15.5
+### Description: Remove deprecated authentication tables and finalize the migration by removing temporary columns and constraints
+### Details:
+1) Identify all legacy authentication tables that can be removed, 2) Create scripts to safely remove these tables after verifying they're no longer needed, 3) Remove temporary columns and constraints added during migration, 4) Update documentation to reflect the new database schema and authentication flow
+

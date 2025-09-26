@@ -1,0 +1,11 @@
+# Task ID: 7
+# Title: Map auth client methods in UI forms to unified API
+# Status: pending
+# Dependencies: 5, 6
+# Priority: medium
+# Description: Ensure LoginForm/SignupForm/SessionProvider and related hooks use @repo/auth/client methods that are provider-agnostic; keep error.code handling stable.
+# Details:
+
+
+# Test Strategy:
+

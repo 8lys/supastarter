@@ -1,0 +1,11 @@
+# Task ID: 12
+# Title: QA: flows (signup, login, magic link, OAuth, signout)
+# Status: pending
+# Dependencies: 5, 6, 7
+# Priority: medium
+# Description: Manual/automated checks that flows work with both providers via switch; update Playwright tests if needed.
+# Details:
+
+
+# Test Strategy:
+

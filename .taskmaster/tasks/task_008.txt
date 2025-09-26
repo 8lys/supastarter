@@ -1,0 +1,11 @@
+# Task ID: 8
+# Title: Add Supabase env variables and configuration docs
+# Status: pending
+# Dependencies: 4
+# Priority: low
+# Description: Document NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, SUPABASE_SERVICE_ROLE_KEY, and any provider toggle env. Update README/setup docs.
+# Details:
+
+
+# Test Strategy:
+

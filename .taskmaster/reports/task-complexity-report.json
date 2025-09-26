@@ -1,0 +1,141 @@
+{
+	"meta": {
+		"generatedAt": "2025-09-25T23:51:45.517Z",
+		"tasksAnalyzed": 16,
+		"totalTasks": 16,
+		"analysisCount": 16,
+		"thresholdScore": 3,
+		"projectName": "Taskmaster",
+		"usedResearch": false
+	},
+	"complexityAnalysis": [
+		{
+			"taskId": 1,
+			"taskTitle": "Add provider switch structure under packages/auth/providers",
+			"complexityScore": 3,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Break down the task of creating the provider switch structure into detailed steps including folder creation, file templates for each provider, and ensuring proper exports.",
+			"reasoning": "This task involves straightforward file and folder creation with a clear structure. The existing subtasks already cover the main components (folder structure and entrypoint files for both providers). The complexity is low as it's primarily about setting up the scaffolding for future implementation."
+		},
+		{
+			"taskId": 2,
+			"taskTitle": "Standardize unified auth API surface (types, methods, errors)",
+			"complexityScore": 8,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Break down the standardization of the unified auth API surface into detailed steps covering type definitions, error handling patterns, method signatures, and documentation requirements.",
+			"reasoning": "This is a complex architectural task that requires deep understanding of both auth systems to create a unified abstraction. It involves designing interfaces, error handling patterns, and API contracts that must work across different providers. The existing 5 subtasks are well-structured and cover the necessary components of this design work."
+		},
+		{
+			"taskId": 3,
+			"taskTitle": "Implement Better Auth provider under providers/better-auth",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Detail the steps for moving and adapting the Better Auth implementation to conform to the new unified API structure, including specific files to modify and test cases to verify functionality.",
+			"reasoning": "This task requires refactoring existing code to match the new API surface. It involves understanding the current Better Auth implementation and adapting it to the standardized interfaces. The complexity comes from ensuring backward compatibility while conforming to the new structure. The existing 4 subtasks cover the main aspects of this migration."
+		},
+		{
+			"taskId": 4,
+			"taskTitle": "Implement Supabase provider (SSR/browser/middleware/Hono)",
+			"complexityScore": 7,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Break down the implementation of the Supabase provider into detailed steps covering SSR integration, browser client, middleware helpers, and mapping to the unified API.",
+			"reasoning": "This task involves implementing a new authentication provider from scratch, requiring deep knowledge of Supabase's authentication system and how to adapt it to the unified API. It includes server-side, client-side, and middleware components across different frameworks. The existing 6 subtasks appropriately cover all the necessary implementation areas."
+		},
+		{
+			"taskId": 5,
+			"taskTitle": "Wire package re-exports for provider switching (index.ts, client.ts)",
+			"complexityScore": 4,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Detail the steps for implementing the provider switching mechanism, including environment variable configuration, re-export logic, and testing the switch between providers.",
+			"reasoning": "This task involves creating a dynamic import mechanism based on environment variables. While conceptually straightforward, it requires careful implementation to ensure seamless switching between providers. An additional subtask for testing the switching mechanism would be beneficial beyond the current 2 subtasks."
+		},
+		{
+			"taskId": 6,
+			"taskTitle": "Adapt apps/web middleware to provider helper and preserve cookies",
+			"complexityScore": 5,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Break down the adaptation of the web middleware into steps covering integration with the auth provider helper, preserving existing redirect logic, and ensuring proper cookie handling.",
+			"reasoning": "This task requires modifying existing middleware to use the new provider-agnostic helpers while maintaining current functionality. The complexity comes from ensuring cookies are properly preserved and all existing redirect logic continues to work. Currently has no subtasks, but would benefit from 3 focused subtasks."
+		},
+		{
+			"taskId": 7,
+			"taskTitle": "Map auth client methods in UI forms to unified API",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Break down the process of updating UI components to use the unified auth API, including identifying all components that need updates, mapping error handling, and testing each form's functionality.",
+			"reasoning": "This task involves updating multiple UI components and hooks to use the new provider-agnostic API. It requires understanding the current implementation details of forms and session management, then carefully migrating them while maintaining error handling. Currently has no subtasks but would benefit from 4 focused subtasks."
+		},
+		{
+			"taskId": 8,
+			"taskTitle": "Add Supabase env variables and configuration docs",
+			"complexityScore": 3,
+			"recommendedSubtasks": 2,
+			"expansionPrompt": "Detail the steps for documenting Supabase environment variables, including updating configuration files, README documentation, and setup guides.",
+			"reasoning": "This is a straightforward documentation task that involves identifying all required environment variables and updating documentation. The complexity is low, but it's important for developer onboarding. Would benefit from 2 focused subtasks."
+		},
+		{
+			"taskId": 10,
+			"taskTitle": "RLS policies and indexes verification for app tables",
+			"complexityScore": 7,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Break down the process of auditing and implementing RLS policies into steps covering database schema analysis, policy definition, index creation, and performance testing.",
+			"reasoning": "This task involves database security configuration requiring careful analysis of all tables and their access patterns. It includes auditing existing policies, implementing missing ones, and ensuring performance through proper indexing. The existing 3 subtasks cover the main aspects, but an additional subtask for testing would be beneficial."
+		},
+		{
+			"taskId": 11,
+			"taskTitle": "Replace API (Hono) guards to use provider middleware",
+			"complexityScore": 5,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Detail the steps for replacing the existing Hono middleware with the new provider-agnostic middleware, including identifying all guard implementations, updating imports, and testing the updated middleware.",
+			"reasoning": "This task requires modifying existing API guards to use the new auth middleware while maintaining current authorization checks. It involves understanding the current implementation and ensuring all routes remain properly protected. Currently has no subtasks but would benefit from 3 focused subtasks."
+		},
+		{
+			"taskId": 12,
+			"taskTitle": "QA: flows (signup, login, magic link, OAuth, signout)",
+			"complexityScore": 6,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Break down the QA process for authentication flows into detailed steps covering test case definition, manual testing procedures, automated test updates, and verification with both auth providers.",
+			"reasoning": "This QA task requires comprehensive testing of all authentication flows with both providers. It involves both manual and automated testing, potentially updating Playwright tests, and ensuring consistent behavior across providers. Currently has no subtasks but would benefit from 5 focused subtasks covering each flow."
+		},
+		{
+			"taskId": 13,
+			"taskTitle": "QA: org invitations and seat updates (provider-agnostic)",
+			"complexityScore": 5,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Detail the steps for testing organization invitation flows, including test case definition, verification of seat update hooks, and testing with both auth providers.",
+			"reasoning": "This QA task focuses on organization-specific flows and requires verifying that seat update hooks work correctly regardless of the auth provider. It's moderately complex due to the business logic involved in organization management. Currently has no subtasks but would benefit from 3 focused subtasks."
+		},
+		{
+			"taskId": 14,
+			"taskTitle": "QA: billing redirects and activeOrganization logic",
+			"complexityScore": 5,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Break down the QA process for billing redirects and organization routing into steps covering test case definition, verification of redirect logic, and cookie preservation testing.",
+			"reasoning": "This QA task focuses on billing-related redirects and organization routing, with special attention to cookie handling. It requires understanding the current implementation and ensuring it works with the new auth providers. Currently has no subtasks but would benefit from 3 focused subtasks."
+		},
+		{
+			"taskId": 15,
+			"taskTitle": "Migrate app user PK to UUID = Supabase auth.users.id",
+			"complexityScore": 9,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Detail the database migration process for changing the primary key type, including schema changes, foreign key updates, data migration, application code updates, and rollback procedures.",
+			"reasoning": "This is a high-risk database migration that changes the primary key of a core table and affects all related foreign keys. It requires careful planning, execution, and testing to avoid data loss or application issues. Currently has no subtasks but would benefit from 6 detailed subtasks covering all aspects of this complex migration."
+		},
+		{
+			"taskId": 16,
+			"taskTitle": "Author ADR for auth provider architecture and migration",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Break down the process of creating an Architecture Decision Record into steps covering problem statement, solution options, decision criteria, implementation plan, and rollback strategy.",
+			"reasoning": "This task requires documenting architectural decisions, trade-offs, and migration strategy. It involves understanding the technical and business considerations that led to the auth provider architecture. Currently has no subtasks but would benefit from 4 focused subtasks covering different aspects of the ADR."
+		},
+		{
+			"taskId": 17,
+			"taskTitle": "Remove dead code and legacy auth tables post-switch",
+			"complexityScore": 5,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Detail the process of identifying and removing legacy auth components, including code analysis, database schema changes, and verification that all functionality remains intact.",
+			"reasoning": "This cleanup task requires careful identification of code and database tables that are no longer needed after the migration. It involves understanding dependencies to ensure nothing critical is removed. Currently has no subtasks but would benefit from 3 focused subtasks."
+		}
+	]
+}

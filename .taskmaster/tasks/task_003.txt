@@ -1,0 +1,37 @@
+# Task ID: 3
+# Title: Implement Better Auth provider under providers/better-auth
+# Status: pending
+# Dependencies: 1, 2
+# Priority: medium
+# Description: Move current Better Auth files under providers/better-auth and adapt to unified API surface.
+# Details:
+
+
+# Test Strategy:
+
+
+# Subtasks:
+## 1. Move Better Auth files to providers/better-auth [pending]
+### Dependencies: None
+### Description: Relocate all existing Better Auth implementation files to the new location under packages/auth/providers/better-auth
+### Details:
+Identify all Better Auth files in the current location and move them to the new directory structure. Ensure imports/exports are updated accordingly to maintain functionality.
+
+## 2. Adapt server-side API to unified interface [pending]
+### Dependencies: None
+### Description: Modify the server-side Better Auth implementation to conform to the standardized API surface defined in Task 2
+### Details:
+Update server-side methods to match the unified auth.api.getSession signature. Ensure error handling and return types match the unified { data, error } pattern with consistent error codes.
+
+## 3. Adapt client-side methods to unified interface [pending]
+### Dependencies: None
+### Description: Refactor client-side Better Auth methods to match the unified auth client API
+### Details:
+Update client methods to match the standardized signUp, signIn, magicLink, signOut, and getSession methods. Transform the User and Session shapes to match the unified types. Implement the organization.acceptInvitation method if applicable.
+
+## 4. Implement middleware adapters for Better Auth [pending]
+### Dependencies: None
+### Description: Create middleware helpers for Next.js and Hono that work with Better Auth
+### Details:
+Develop middleware.ts and hono.ts adapters that expose the Better Auth functionality through the unified middleware interface. Ensure proper cookie handling and session management consistent with the unified API.
+

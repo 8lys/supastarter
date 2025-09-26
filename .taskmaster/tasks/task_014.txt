@@ -1,0 +1,11 @@
+# Task ID: 14
+# Title: QA: billing redirects and activeOrganization logic
+# Status: pending
+# Dependencies: 6
+# Priority: medium
+# Description: Verify org routing and paywall redirects keep working; ensure response with Supabase cookies is returned/copies in redirects.
+# Details:
+
+
+# Test Strategy:
+

@@ -1,0 +1,11 @@
+# Task ID: 13
+# Title: QA: org invitations and seat updates (provider-agnostic)
+# Status: pending
+# Dependencies: 5
+# Priority: medium
+# Description: Test invitation acceptance/removal flows trigger seat update hooks regardless of provider.
+# Details:
+
+
+# Test Strategy:
+

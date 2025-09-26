@@ -1,0 +1,42 @@
+# Task ID: 1
+# Title: Add provider switch structure under packages/auth/providers
+# Status: pending
+# Dependencies: None
+# Priority: high
+# Description: Create providers folder with better-auth and supabase subfolders. Prepare provider-specific entrypoints (index.ts, client.ts, middleware.ts, hono.ts).
+# Details:
+
+
+# Test Strategy:
+
+
+# Subtasks:
+## 1. Create provider folder structure [pending]
+### Dependencies: None
+### Description: Create the providers folder under packages/auth with better-auth and supabase subfolders
+### Details:
+Create the following folder structure:
+- packages/auth/providers/
+  - better-auth/
+  - supabase/
+
+## 2. Set up Better Auth provider entrypoint files [pending]
+### Dependencies: None
+### Description: Create the necessary entrypoint files for the Better Auth provider
+### Details:
+Create the following files in packages/auth/providers/better-auth/:
+- index.ts (main exports)
+- client.ts (browser client implementation)
+- middleware.ts (Next.js middleware helper)
+- hono.ts (Hono middleware implementation)
+
+## 3. Set up Supabase provider entrypoint files [pending]
+### Dependencies: None
+### Description: Create the necessary entrypoint files for the Supabase provider
+### Details:
+Create the following files in packages/auth/providers/supabase/:
+- index.ts (main exports)
+- client.ts (browser client implementation)
+- middleware.ts (Next.js middleware helper)
+- hono.ts (Hono middleware implementation)
+

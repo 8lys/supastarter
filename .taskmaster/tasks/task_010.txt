@@ -1,0 +1,31 @@
+# Task ID: 10
+# Title: RLS policies and indexes verification for app tables
+# Status: pending
+# Dependencies: None
+# Priority: medium
+# Description: Ensure RLS policies are defined per operation with auth.uid() and necessary indexes exist. Use declarative schema and rules.
+# Details:
+
+
+# Test Strategy:
+
+
+# Subtasks:
+## 1. Audit existing tables for RLS policies [pending]
+### Dependencies: None
+### Description: Review all application tables to verify they have appropriate Row Level Security policies that use auth.uid() for user-specific access control.
+### Details:
+Create a comprehensive list of all tables in the database schema. For each table, document existing RLS policies, noting whether they properly use auth.uid() for authentication. Flag any tables missing RLS policies or using incorrect authentication methods. Pay special attention to tables with sensitive data.
+
+## 2. Implement missing or correct existing RLS policies [pending]
+### Dependencies: 10.1
+### Description: Create or modify RLS policies to ensure each operation type (SELECT, INSERT, UPDATE, DELETE) has separate policies using auth.uid() for proper authorization.
+### Details:
+Based on the audit results, write declarative schema definitions for missing RLS policies. Ensure each operation type has its own policy rather than using ALL. Follow the pattern: CREATE POLICY "policy_name" ON table_name FOR operation TO authenticated USING (auth.uid() = user_id). Document any special cases where different policy logic is required.
+
+## 3. Add necessary indexes to support RLS queries [pending]
+### Dependencies: 10.2
+### Description: Identify and create indexes on columns referenced in RLS policies to ensure efficient query performance when policies are applied.
+### Details:
+Review all RLS policies to identify columns used in policy conditions (especially foreign keys and user_id columns). Create appropriate indexes on these columns if they don't already exist. Test query performance with EXPLAIN ANALYZE before and after index creation to verify improvements. Document all indexes in the schema definition files.
+
