@@ -158,7 +158,7 @@ export default async function middleware(req: NextRequest) {
         const response = getBaseResponse();
         const session = await getSession(req);
 
-		if (session && pathname !== "/auth/reset-password") {
+		if (session && session.user && pathname !== "/auth/reset-password") {
             return copyCookies(
                 response,
                 NextResponse.redirect(new URL("/app", origin)),
