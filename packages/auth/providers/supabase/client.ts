@@ -19,7 +19,7 @@ function supa() {
     );
 }
 
-export const clientAuth: UnifiedClientAuthApi = {
+export const authClient: UnifiedClientAuthApi = {
     signUp: {
         async email({ email, password, name, callbackURL }: EmailSignUpParams) {
             try {
