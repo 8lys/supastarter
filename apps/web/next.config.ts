@@ -6,6 +6,16 @@ const withNextIntl = nextIntlPlugin("./modules/i18n/request.ts");
 
 const nextConfig: NextConfig = {
 	transpilePackages: ["@repo/api", "@repo/auth", "@repo/database"],
+	// Performance optimizations for local dev
+	swcMinify: true,
+	modularizeImports: {
+		"@radix-ui/react-icons": {
+			transform: "@radix-ui/react-icons/{{member}}",
+		},
+		"lucide-react": {
+			transform: "lucide-react/dist/esm/icons/{{kebabCase member}}",
+		},
+	},
 	images: {
 		remotePatterns: [
 			{

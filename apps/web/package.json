@@ -102,7 +102,7 @@
 	"private": true,
 	"scripts": {
 		"build": "next build",
-		"dev": "next dev --turbo",
+		"dev": "next dev",
 		"e2e": "pnpm exec playwright test --ui",
 		"e2e:ci": "pnpm exec playwright install && pnpm exec playwright test",
 		"lint": "next lint",

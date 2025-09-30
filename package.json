@@ -3,7 +3,7 @@
 	"private": true,
 	"scripts": {
 		"build": "dotenv -c -- turbo build",
-		"dev": "dotenv -c -- turbo dev --concurrency 15",
+		"dev": "dotenv -c -- turbo dev --concurrency 4",
 		"start": "dotenv -c -- turbo start",
 		"lint": "biome lint .",
 		"clean": "turbo clean",
@@ -12,7 +12,7 @@
 	"engines": {
 		"node": ">=20"
 	},
-	"packageManager": "pnpm@9.3.0",
+	"packageManager": "pnpm@10.17.1",
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@repo/tsconfig": "workspace:*",
@@ -25,6 +25,15 @@
 		"overrides": {
 			"@types/react": "19.0.0",
 			"@types/react-dom": "19.0.0"
-		}
+		},
+		"onlyBuiltDependencies": [
+			"@biomejs/biome",
+			"@parcel/watcher",
+			"@prisma/client",
+			"@prisma/engines",
+			"esbuild",
+			"prisma",
+			"sharp"
+		]
 	}
 }
