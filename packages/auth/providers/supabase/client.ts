@@ -66,13 +66,19 @@ export const authClient: UnifiedClientAuthApi = {
         },
         async social({ provider, callbackURL }: SocialSignInParams) {
             try {
-                const { error } = await supa().auth.signInWithOAuth({
+                const { data, error } = await supa().auth.signInWithOAuth({
                     provider: provider as any,
                     options: {
                         redirectTo: callbackURL,
                     },
                 });
                 if (error) return { data: undefined, error: toAuthErrorFromSupabase(error) };
+                
+                // Supabase returns the OAuth URL - we need to redirect to it
+                if (data?.url) {
+                    window.location.href = data.url;
+                }
+                
                 return { data: undefined, error: undefined };
             } catch (e) {
                 return { data: undefined, error: toAuthErrorFromSupabase(e) };
