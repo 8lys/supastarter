@@ -66,21 +66,40 @@ export const authClient: UnifiedClientAuthApi = {
         },
         async social({ provider, callbackURL }: SocialSignInParams) {
             try {
+                console.log('[Supabase OAuth] Starting signin with:', { provider, callbackURL });
+                
                 const { data, error } = await supa().auth.signInWithOAuth({
                     provider: provider as any,
                     options: {
                         redirectTo: callbackURL,
                     },
                 });
-                if (error) return { data: undefined, error: toAuthErrorFromSupabase(error) };
+                
+                console.log('[Supabase OAuth] Response:', { data, error });
+                
+                if (error) {
+                    console.error('[Supabase OAuth] Error:', error);
+                    return { data: undefined, error: toAuthErrorFromSupabase(error) };
+                }
                 
                 // Supabase returns the OAuth URL - we need to redirect to it
                 if (data?.url) {
+                    console.log('[Supabase OAuth] Redirecting to:', data.url);
                     window.location.href = data.url;
+                } else {
+                    console.error('[Supabase OAuth] No URL in response! Data:', data);
+                    return { 
+                        data: undefined, 
+                        error: {
+                            code: 'OAUTH_ERROR' as const,
+                            message: 'No OAuth URL returned from Supabase. Check your provider configuration in Supabase dashboard.',
+                        }
+                    };
                 }
                 
                 return { data: undefined, error: undefined };
             } catch (e) {
+                console.error('[Supabase OAuth] Exception:', e);
                 return { data: undefined, error: toAuthErrorFromSupabase(e) };
             }
         },
