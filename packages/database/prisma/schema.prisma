@@ -68,6 +68,9 @@ model Session {
     updatedAt DateTime
 
     @@unique([token])
+    @@index([userId])
+    @@index([expiresAt])
+    @@index([token, expiresAt])
     @@map("session")
 }
 
@@ -89,6 +92,8 @@ model Account {
     createdAt             DateTime
     updatedAt             DateTime
 
+    @@index([userId])
+    @@index([accountId, providerId])
     @@map("account")
 }
 
@@ -157,6 +162,8 @@ model Member {
     createdAt      DateTime
 
     @@unique([organizationId, userId])
+    @@index([userId])
+    @@index([organizationId])
     @@map("member")
 }
 
