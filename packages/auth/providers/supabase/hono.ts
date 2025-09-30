@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { createMiddleware } from "hono/factory";
 import type { Context } from "hono";
-import { mapSupabaseUser } from "./map";
+import { mapSupabaseUserToAuthUser } from "./map";
 
 function getBearerToken(c: Context): string | undefined {
     const auth = c.req.header("authorization");
@@ -29,7 +29,7 @@ export const authMiddleware = createMiddleware<{
 
     const supabase = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
         {
             auth: {
                 persistSession: false,
@@ -43,7 +43,7 @@ export const authMiddleware = createMiddleware<{
         return c.json({ error: "Unauthorized" }, 401);
     }
 
-    c.set("user", mapSupabaseUser(data.user));
+    c.set("user", mapSupabaseUserToAuthUser(data.user));
     await next();
 });
 

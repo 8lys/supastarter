@@ -1,0 +1,34 @@
+---
+alwaysApply: true
+---
+# Rule: Disallow Imports from Unstable/Internal Paths of Third-Party Libraries
+
+This rule MUST be strictly followed by the AI agent when writing or modifying code, specifically concerning imports from external, third-party libraries.
+
+## 1. Prohibition (Third-Party Libraries)
+
+1.1. The AI agent MUST NOT generate or suggest any import statements that resolve to paths within **third-party libraries** containing `unstable`, `internal`, `private`, `experimental`, or similar keywords suggesting non-public APIs, unless explicitly and exceptionally approved by the user for a specific, documented reason.
+    *   This specifically includes, but is not limited to, paths like `\@trpc/server/unstable-core-do-not-import` or similar patterns in any external library.
+
+1.2. If the AI agent encounters existing code that violates this rule (i.e., imports from unstable/internal paths of a third-party library), it SHOULD NOT replicate the problematic import pattern in new code. It MAY suggest refactoring the existing code to use stable, public APIs from that library if it's within the scope of the current task and the AI is confident in the refactoring. If unsure, it should flag the existing unstable import to the USER.
+
+## 2. Justification
+
+2.1. **Stability:** Unstable and internal APIs from third-party libraries are subject to change without notice in minor or patch versions, leading to unexpected breakages.
+2.2. **Maintainability:** Code relying on internal APIs of external libraries is harder to maintain, upgrade, and troubleshoot when library versions change.
+2.3. **Type Safety:** Types exported from unstable/internal paths of third-party libraries may not be reliable or may change, undermining TypeScript's benefits.
+2.4. **Best Practices:** Using only public, documented APIs from third-party libraries is a fundamental software engineering best practice.
+
+## 3. Alternatives (Third-Party Libraries)
+
+3.1. The AI agent MUST always prioritize using the public, documented API of any third-party library or framework.
+3.2. If a type or functionality from a third-party library seems unavailable through its public API, the AI agent SHOULD consult that library's official documentation for recommended patterns (e.g., type inference via `typeof`, using publicly exported helper types, or established patterns for extension).
+3.3. If a truly necessary piece of functionality from a third-party library seems only available via an unstable path, the AI agent MUST bring this to the USER's attention for a decision before proceeding.
+
+## 4. Scope and Clarification
+
+4.1. This rule primarily applies to import statements targeting **third-party libraries** (i.e., code imported from `node_modules` or external sources).
+
+4.2. **Internal Project Code:** This rule does NOT strictly prohibit importing from specifically structured internal paths within the 8LYS Stack's own codebase (e.g., `my-8lys-app/src/core/internalUtils`). The project itself may define its own conventions for internal module visibility and stability. However, the AI SHOULD still favor using well-defined module exports and maintain a clean internal structure, adhering to general principles of good API design even for internal modules.
+
+4.3. This rule applies to all code files, including TypeScript, JavaScript, and any configuration files where import paths might be relevant.

@@ -249,7 +249,7 @@
         "description": "Make packages/auth/index.ts and packages/auth/client.ts re-export from chosen provider (one-line export), mirroring database switch pattern.",
         "details": "",
         "testStrategy": "",
-        "status": "pending",
+        "status": "done",
         "dependencies": [
           3,
           4
@@ -262,7 +262,7 @@
             "description": "Create logic to select the appropriate auth provider based on environment variables, mirroring the database switch pattern",
             "dependencies": [],
             "details": "Implement a mechanism in packages/auth that reads environment variables to determine which provider (better-auth or supabase) should be used. This should follow the same pattern used in the database package for provider switching.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -273,7 +273,7 @@
               "5.1"
             ],
             "details": "Create or modify packages/auth/index.ts and packages/auth/client.ts to dynamically import and re-export all necessary functions, types, and classes from the provider selected by the logic implemented in subtask 5.1. Each file should contain a single export statement that forwards everything from the appropriate provider module.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": ""
           },
           {
@@ -281,7 +281,7 @@
             "title": "Test provider switching produces identical app behavior",
             "description": "Verify switching re-exports between providers retains identical UI/API behavior across key flows.",
             "details": "",
-            "status": "pending",
+            "status": "done",
             "dependencies": [],
             "parentTaskId": 5
           }
@@ -293,7 +293,7 @@
         "description": "Update apps/web/middleware.ts to use @repo/auth middleware helper first; maintain existing redirects and always return/copy the response including Supabase cookies.",
         "details": "",
         "testStrategy": "",
-        "status": "in-progress",
+        "status": "done",
         "dependencies": [
           4,
           5
@@ -307,7 +307,7 @@
         "description": "Ensure LoginForm/SignupForm/SessionProvider and related hooks use @repo/auth/client methods that are provider-agnostic; keep error.code handling stable.",
         "details": "",
         "testStrategy": "",
-        "status": "pending",
+        "status": "done",
         "dependencies": [
           5,
           6
@@ -377,7 +377,7 @@
         "description": "Replace session validation in packages/api/src/middleware/* to import from @repo/auth/hono (provider-specific under the hood). Keep admin role checks.",
         "details": "",
         "testStrategy": "",
-        "status": "pending",
+        "status": "done",
         "dependencies": [
           5
         ],
@@ -582,7 +582,7 @@
     "metadata": {
       "created": "2025-09-25T21:10:26.373Z",
       "description": "Default tasks context",
-      "updated": "2025-09-26T08:10:04.284Z"
+      "updated": "2025-09-26T08:21:55.366Z"
     }
   }
 }

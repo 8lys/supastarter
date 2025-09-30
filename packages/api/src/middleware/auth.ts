@@ -1,2 +1,2 @@
-import { authMiddleware } from "@repo/auth/hono";
+import { authMiddleware } from "@repo/auth";
 export { authMiddleware };
