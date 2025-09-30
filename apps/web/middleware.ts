@@ -49,7 +49,7 @@ export default async function middleware(req: NextRequest) {
 		const session = await getSession(req);
 		let locale = req.cookies.get(appConfig.i18n.localeCookieName)?.value;
 
-		if (!session) {
+		if (!session || !session.user) {
             return copyCookies(
                 response,
                 NextResponse.redirect(
