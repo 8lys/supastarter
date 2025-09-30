@@ -55,6 +55,25 @@ export const serverAuth: UnifiedServerAuthApi = {
     },
 };
 
+/**
+ * Supabase doesn't use a server-side auth handler like Better Auth.
+ * OAuth flows are handled client-side through Supabase's SDK.
+ * This stub handler returns 404 for any auth API requests.
+ */
+export const auth = {
+    handler: async (_req: Request) => {
+        return new Response(
+            JSON.stringify({ 
+                error: "Supabase provider doesn't use server-side auth handlers. OAuth is handled client-side." 
+            }), 
+            { 
+                status: 404,
+                headers: { "Content-Type": "application/json" }
+            }
+        );
+    }
+};
+
 export * from "./client";
 export * from "./middleware";
 
