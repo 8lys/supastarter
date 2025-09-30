@@ -2,15 +2,18 @@
 
 ## TL;DR
 
-**For Next.js (persistent server):**
+**For Local Development (.env.local):**
 ```env
+# Fast session pooler for local dev server
 DATABASE_URL="postgresql://postgres.qcacwkquchyridjfysbp:[PASSWORD]@aws-0-us-west-1.pooler.supabase.com:5432/postgres"
 DIRECT_URL="postgresql://postgres.qcacwkquchyridjfysbp:[PASSWORD]@aws-0-us-west-1.pooler.supabase.com:5432/postgres"
 ```
 
-**For serverless functions ONLY:**
+**For Vercel Production (Environment Variables in Vercel Dashboard):**
 ```env
+# Transaction pooler for serverless functions
 DATABASE_URL="postgresql://postgres.qcacwkquchyridjfysbp:[PASSWORD]@aws-0-us-west-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=1"
+DIRECT_URL="postgresql://postgres.qcacwkquchyridjfysbp:[PASSWORD]@aws-0-us-west-1.pooler.supabase.com:5432/postgres"
 ```
 
 ## Understanding Supabase Connection Modes
@@ -52,29 +55,38 @@ Using transaction pooler with Next.js means:
 
 ## Recommended Configuration
 
-### For Next.js (Development & Production)
+### For Vercel Deployment (Recommended)
 
-**.env.local / .env.production:**
+**Local Development (.env.local):**
 ```env
-# Session pooler for persistent connections
+# Session pooler for fast local development
 DATABASE_URL="postgresql://postgres.qcacwkquchyridjfysbp:[PASSWORD]@aws-0-us-west-1.pooler.supabase.com:5432/postgres"
-
-# Same for migrations (or use direct connection)
 DIRECT_URL="postgresql://postgres.qcacwkquchyridjfysbp:[PASSWORD]@aws-0-us-west-1.pooler.supabase.com:5432/postgres"
 
-# Supabase client (if using Supabase Auth)
+# Supabase Auth
 NEXT_PUBLIC_SUPABASE_URL="https://qcacwkquchyridjfysbp.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="[YOUR_ANON_KEY]"
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="[YOUR_ANON_KEY]"
 ```
 
-### For Serverless Functions (Edge Runtime, API Routes as Functions)
-
-If you deploy individual API routes as serverless functions:
+**Vercel Environment Variables (Production/Preview):**
 ```env
+# Transaction pooler for serverless
 DATABASE_URL="postgresql://postgres.qcacwkquchyridjfysbp:[PASSWORD]@aws-0-us-west-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=1"
+
+# Session pooler for migrations (DIRECT_URL)
+DIRECT_URL="postgresql://postgres.qcacwkquchyridjfysbp:[PASSWORD]@aws-0-us-west-1.pooler.supabase.com:5432/postgres"
+
+# Supabase Auth (same as local)
+NEXT_PUBLIC_SUPABASE_URL="https://qcacwkquchyridjfysbp.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="[YOUR_ANON_KEY]"
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="[YOUR_ANON_KEY]"
 ```
 
-**Important**: Add `connection_limit=1` to prevent connection exhaustion.
+**Why Different URLs?**
+- **Local**: Session pooler (port 5432) because Next.js dev server is persistent
+- **Vercel**: Transaction pooler (port 6543) because Vercel runs serverless functions
+- **DIRECT_URL**: Always session pooler for Prisma migrations
 
 ## Performance Comparison
 
