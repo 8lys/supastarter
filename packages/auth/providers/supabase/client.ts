@@ -5,6 +5,8 @@ import type {
     EmailSignInParams,
     EmailSignUpParams,
     MagicLinkParams,
+    SocialSignInParams,
+    PasskeySignInParams,
     ClientGetSessionParams,
 } from "../../types";
 import { toAuthErrorFromSupabase } from "../../lib/errors";
@@ -61,6 +63,31 @@ export const clientAuth: UnifiedClientAuthApi = {
             } catch (e) {
                 return { data: undefined, error: toAuthErrorFromSupabase(e) };
             }
+        },
+        async social({ provider, callbackURL }: SocialSignInParams) {
+            try {
+                const { error } = await supa().auth.signInWithOAuth({
+                    provider: provider as any,
+                    options: {
+                        redirectTo: callbackURL,
+                    },
+                });
+                if (error) return { data: undefined, error: toAuthErrorFromSupabase(error) };
+                return { data: undefined, error: undefined };
+            } catch (e) {
+                return { data: undefined, error: toAuthErrorFromSupabase(e) };
+            }
+        },
+        async passkey(_params?: PasskeySignInParams) {
+            // Supabase doesn't natively support passkeys
+            // Return not implemented error
+            return {
+                data: undefined,
+                error: {
+                    code: "UNKNOWN" as const,
+                    message: "Passkey authentication is not supported with Supabase provider",
+                },
+            };
         },
     },
     async signOut() {
