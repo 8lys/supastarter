@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { createMiddleware } from "hono/factory";
 import type { Context } from "hono";
+import { mapSupabaseUser } from "./map";
 
 function getBearerToken(c: Context): string | undefined {
     const auth = c.req.header("authorization");
@@ -17,7 +18,9 @@ function getBearerToken(c: Context): string | undefined {
 }
 
 export const authMiddleware = createMiddleware<{
-    Variables: { user: unknown };
+    Variables: {
+        user: { id: string; email: string; name?: string; image?: string };
+    };
 }>(async (c, next) => {
     const token = getBearerToken(c);
     if (!token) {
@@ -40,7 +43,7 @@ export const authMiddleware = createMiddleware<{
         return c.json({ error: "Unauthorized" }, 401);
     }
 
-    c.set("user", data.user);
+    c.set("user", mapSupabaseUser(data.user));
     await next();
 });
 
