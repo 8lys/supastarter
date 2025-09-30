@@ -56,15 +56,84 @@ export const serverAuth: UnifiedServerAuthApi = {
 };
 
 /**
- * Supabase doesn't use a server-side auth handler like Better Auth.
- * OAuth flows are handled client-side through Supabase's SDK.
- * This stub handler returns 404 for any auth API requests.
+ * Supabase compatibility handler for Better Auth API endpoints.
+ * Handles /api/auth/get-session endpoint that UI and middleware depend on.
+ * OAuth flows are handled entirely client-side through Supabase SDK.
  */
 export const auth = {
-    handler: async (_req: Request) => {
+    handler: async (req: Request) => {
+        const url = new URL(req.url);
+        
+        // Handle get-session endpoint
+        if (url.pathname.includes('/get-session')) {
+            try {
+                // Extract cookies from request
+                const cookieHeader = req.headers.get('cookie') || '';
+                const cookies = cookieHeader.split(';').reduce((acc, cookie) => {
+                    const [key, value] = cookie.trim().split('=');
+                    if (key) acc[key] = value;
+                    return acc;
+                }, {} as Record<string, string>);
+
+                const supabase = createServerClient(
+                    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                    {
+                        cookies: {
+                            getAll() {
+                                return Object.entries(cookies).map(([name, value]) => ({
+                                    name,
+                                    value: decodeURIComponent(value)
+                                }));
+                            },
+                            setAll() {
+                                // No-op for handler context
+                            },
+                        },
+                    },
+                );
+
+                const { data: { user }, error } = await supabase.auth.getUser();
+                
+                if (error || !user) {
+                    return new Response(
+                        JSON.stringify({ user: null, session: null }), 
+                        { 
+                            status: 200,
+                            headers: { "Content-Type": "application/json" }
+                        }
+                    );
+                }
+
+                const authUser = mapSupabaseUserToAuthUser(user);
+                const session = {
+                    id: null,
+                    expiresAt: null,
+                    activeOrganizationId: null,
+                };
+
+                return new Response(
+                    JSON.stringify({ user: authUser, session }), 
+                    { 
+                        status: 200,
+                        headers: { "Content-Type": "application/json" }
+                    }
+                );
+            } catch (e) {
+                return new Response(
+                    JSON.stringify({ user: null, session: null }), 
+                    { 
+                        status: 200,
+                        headers: { "Content-Type": "application/json" }
+                    }
+                );
+            }
+        }
+
+        // Other auth endpoints not supported with Supabase
         return new Response(
             JSON.stringify({ 
-                error: "Supabase provider doesn't use server-side auth handlers. OAuth is handled client-side." 
+                error: "Endpoint not supported. Supabase handles OAuth client-side." 
             }), 
             { 
                 status: 404,
