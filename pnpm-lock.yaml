@@ -42,6 +42,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.0.1
         version: 5.0.1(react-hook-form@7.55.0(react@19.1.0))
+      '@prisma/client':
+        specifier: ^6.16.2
+        version: 6.16.2(prisma@6.16.2(typescript@5.8.3))(typescript@5.8.3)
       '@radix-ui/react-accordion':
         specifier: ^1.2.4
         version: 1.2.4(@types/react-dom@19.0.0)(@types/react@19.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
