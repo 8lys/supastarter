@@ -83,7 +83,9 @@ export function LoginForm() {
 		: (redirectTo ?? config.auth.redirectAfterSignIn);
 
 	useEffect(() => {
+		console.log('[LoginForm] Session state:', { sessionLoaded, user, redirectPath });
 		if (sessionLoaded && user) {
+			console.log('[LoginForm] User detected, redirecting to:', redirectPath);
 			router.replace(redirectPath);
 		}
 	}, [user, sessionLoaded]);
