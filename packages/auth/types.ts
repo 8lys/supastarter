@@ -88,6 +88,15 @@ export interface MagicLinkParams {
     callbackURL?: string;
 }
 
+export interface SocialSignInParams {
+    provider: "google" | "github" | string;
+    callbackURL?: string;
+}
+
+export interface PasskeySignInParams {
+    // Passkey signin typically doesn't need params - handled by browser
+}
+
 export interface AcceptInvitationParams {
     invitationId: string | null | undefined;
 }
@@ -111,6 +120,8 @@ export interface UnifiedClientAuthApi {
     signIn: {
         email(params: EmailSignInParams): Promise<AuthResult<void>>;
         magicLink(params: MagicLinkParams): Promise<AuthResult<void>>;
+        social(params: SocialSignInParams): Promise<AuthResult<void>>;
+        passkey(params?: PasskeySignInParams): Promise<AuthResult<void>>;
     };
     signOut(): Promise<AuthResult<void>>;
     getSession(params?: ClientGetSessionParams): Promise<
