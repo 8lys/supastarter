@@ -10,9 +10,10 @@ Completed comprehensive audit of the Supabase authentication provider implementa
 
 ### Critical Issues Found & Fixed
 
-1. ✅ **Social OAuth Sign-in** - MISSING → **IMPLEMENTED**
-2. ✅ **Passkey Support** - MISSING → **GRACEFULLY HANDLED**
-3. ✅ **Type System Gaps** - Incomplete → **FIXED**
+1. ✅ **Export Name Mismatch** - Runtime Error → **FIXED**
+2. ✅ **Social OAuth Sign-in** - MISSING → **IMPLEMENTED**
+3. ✅ **Passkey Support** - MISSING → **GRACEFULLY HANDLED**
+4. ✅ **Type System Gaps** - Incomplete → **FIXED**
 
 ### Compliance Status
 
@@ -61,7 +62,46 @@ The implementation correctly follows the Supabase Auth SSR guidelines:
 
 ## ❌ Critical Issues Fixed
 
-### Issue 1: Missing Social OAuth Sign-in
+### Issue 1: Export Name Mismatch
+
+**Severity:** 🚨 CRITICAL - Runtime Error
+
+**Problem:**
+```typescript
+// UI imports this
+import { authClient } from '@repo/auth/client';
+
+// Better Auth exports this (correct)
+export const authClient = createAuthClient({...});
+
+// Supabase was exporting this (WRONG!)
+export const clientAuth: UnifiedClientAuthApi = {...};
+
+// Result: authClient.signIn.social() was undefined
+```
+
+**Impact:**
+- Social signin buttons threw runtime error on click
+- `authClient.signIn.social is not a function`
+- Complete failure of GitHub/Google signin
+
+**Fix Applied:**
+```typescript
+// Changed in packages/auth/providers/supabase/client.ts
+export const authClient: UnifiedClientAuthApi = { // ✅ Now matches Better Auth
+    signIn: {
+        social(...) { ... },
+        // ...
+    }
+}
+```
+
+**Root Cause:** Export name inconsistency between providers  
+**Solution:** Standardized on `authClient` export name across all providers
+
+---
+
+### Issue 2: Missing Social OAuth Sign-in
 
 **Severity:** 🚨 CRITICAL - Runtime Error
 
@@ -131,7 +171,7 @@ async social({ provider, callbackURL }: SocialSignInParams) {
 
 ---
 
-### Issue 2: Missing Passkey Support
+### Issue 3: Missing Passkey Support
 
 **Severity:** 🚨 HIGH - Runtime Error
 
@@ -179,7 +219,7 @@ Consider disabling `config.auth.enablePasskeys` when using Supabase provider, or
 
 ---
 
-### Issue 3: Type System Gaps
+### Issue 4: Type System Gaps
 
 **Problem:**
 - Better Auth client has more methods than unified types defined
