@@ -82,6 +82,29 @@ export function LoginForm() {
 		? `/app/organization-invitation/${invitationId}`
 		: (redirectTo ?? config.auth.redirectAfterSignIn);
 
+	// Handle OAuth callback on page load
+	useEffect(() => {
+		const handleOAuthCallback = async () => {
+			// Check if we have OAuth params in URL
+			const hashParams = new URLSearchParams(window.location.hash.substring(1));
+			const queryParams = new URLSearchParams(window.location.search);
+			
+			if (hashParams.get('access_token') || queryParams.get('code')) {
+				console.log('[LoginForm] OAuth callback detected, establishing session...');
+				try {
+					// Force session refresh to exchange code for tokens
+					await authClient.getSession({ query: { disableCookieCache: true } });
+					queryClient.invalidateQueries({ queryKey: sessionQueryKey });
+					console.log('[LoginForm] Session exchanged successfully');
+				} catch (error) {
+					console.error('[LoginForm] OAuth callback error:', error);
+				}
+			}
+		};
+		
+		handleOAuthCallback();
+	}, []);
+
 	useEffect(() => {
 		console.log('[LoginForm] Session state:', { sessionLoaded, user, redirectPath });
 		if (sessionLoaded && user) {
