@@ -26,7 +26,10 @@ export function SocialSigninButton({
 	const onSignin = async () => {
 		try {
 			setIsLoading(true);
-			const callbackURL = new URL(redirectPath, window.location.origin);
+			// OAuth callback route with final destination as 'next' param
+			const callbackURL = new URL('/auth/callback', window.location.origin);
+			callbackURL.searchParams.set('next', redirectPath);
+			
 			const { error } = await authClient.signIn.social({
 				provider,
 				callbackURL: callbackURL.toString(),
