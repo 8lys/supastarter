@@ -67,6 +67,18 @@ export interface AuthClient {
 			invitationId: string | null | undefined;
 		}): Promise<AuthResult<void>>;
 	};
+	updateUser(params: {
+		name?: string;
+		imageUrl?: string;
+		locale?: string;
+		onboardingComplete?: boolean;
+	}): Promise<AuthResult<void>>;
+	changePassword(params: {
+		currentPassword: string;
+		newPassword: string;
+		revokeOtherSessions?: boolean;
+	}): Promise<AuthResult<void>>;
+	deleteUser(params: Record<string, never>): Promise<AuthResult<void>>;
 	signOut(): Promise<AuthResult<void>>;
 }
 

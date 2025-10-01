@@ -173,6 +173,90 @@ export const authClient: AuthClient = {
             }
         },
     },
+    async updateUser({ name, imageUrl, locale, onboardingComplete }: any) {
+        try {
+            // Build user_metadata updates
+            const updates: any = {};
+            if (name !== undefined) updates.name = name;
+            if (imageUrl !== undefined) updates.avatar_url = imageUrl;
+            if (locale !== undefined) updates.locale = locale;
+            if (onboardingComplete !== undefined) updates.onboardingComplete = onboardingComplete;
+
+            const { error } = await supa().auth.updateUser({
+                data: updates,
+            });
+            
+            if (error) return { data: undefined, error: toAuthErrorFromSupabase(error) };
+            return { data: undefined, error: undefined };
+        } catch (e) {
+            return { data: undefined, error: toAuthErrorFromSupabase(e) };
+        }
+    },
+    async changePassword({ currentPassword, newPassword, revokeOtherSessions }: any) {
+        try {
+            // Supabase doesn't verify current password in updateUser
+            // We need to first verify current password by attempting a sign-in
+            const { data: { user } } = await supa().auth.getUser();
+            if (!user?.email) {
+                return {
+                    data: undefined,
+                    error: {
+                        code: "UNAUTHORIZED",
+                        message: "User not authenticated",
+                    },
+                };
+            }
+
+            // Verify current password
+            const { error: verifyError } = await supa().auth.signInWithPassword({
+                email: user.email,
+                password: currentPassword,
+            });
+            
+            if (verifyError) {
+                return { 
+                    data: undefined, 
+                    error: {
+                        code: "INVALID_PASSWORD",
+                        message: "Current password is incorrect",
+                    }
+                };
+            }
+
+            // Update to new password
+            const { error } = await supa().auth.updateUser({
+                password: newPassword,
+            });
+            
+            if (error) return { data: undefined, error: toAuthErrorFromSupabase(error) };
+
+            // Supabase automatically revokes other sessions when password changes
+            // revokeOtherSessions param is for Better Auth compatibility
+            
+            return { data: undefined, error: undefined };
+        } catch (e) {
+            return { data: undefined, error: toAuthErrorFromSupabase(e) };
+        }
+    },
+    async deleteUser(_params: any) {
+        try {
+            // Call app endpoint to handle user deletion
+            // (can't delete directly from client for security)
+            const res = await fetch(`/api/user/delete`, {
+                method: "DELETE",
+                credentials: "include",
+            });
+            
+            if (!res.ok) {
+                const text = await res.text();
+                return { data: undefined, error: toAuthErrorFromSupabase(text) };
+            }
+            
+            return { data: undefined, error: undefined };
+        } catch (e) {
+            return { data: undefined, error: toAuthErrorFromSupabase(e) };
+        }
+    },
 };
 
 
