@@ -58,18 +58,21 @@ export function UserMenu({ showUserName }: { showUserName?: boolean }) {
 		},
 	];
 
-	const onLogout = () => {
-		authClient.signOut({
-			fetchOptions: {
-				onSuccess: async () => {
-					await clearCache();
-					window.location.href = new URL(
-						config.auth.redirectAfterLogout,
-						window.location.origin,
-					).toString();
-				},
-			},
-		});
+	const onLogout = async () => {
+		// Call signOut and handle redirect in a provider-agnostic way
+		const { error } = await authClient.signOut();
+		
+		if (error) {
+			console.error('[Logout] Error signing out:', error);
+			return;
+		}
+		
+		// Clear cache and redirect after successful sign out
+		await clearCache();
+		window.location.href = new URL(
+			config.auth.redirectAfterLogout,
+			window.location.origin,
+		).toString();
 	};
 
 	if (!user) {
