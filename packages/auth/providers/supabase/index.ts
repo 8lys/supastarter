@@ -5,7 +5,7 @@ import { mapSupabaseUserToAuthUser } from "./map";
 import { createSupabaseServerClient } from "./server";
 
 export const serverAuth: UnifiedServerAuthApi = {
-    async getSession() {
+    async getSession(_params?: { headers?: Headers; query?: any }) {
         try {
             const supabase = await createSupabaseServerClient();
 

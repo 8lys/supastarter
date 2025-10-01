@@ -108,7 +108,7 @@ export interface UnifiedServerAuthApi {
     /**
      * Resolve current user and session on the server with request headers.
      */
-    getSession(params: ServerGetSessionParams): Promise<
+    getSession(params?: ServerGetSessionParams): Promise<
         AuthResult<{ user: AuthUser; session: AuthSession } | null>
     >;
 }
