@@ -3,4 +3,7 @@ export * from "../../auth";
 export * from "./middleware";
 export * from "./hono";
 
+// Export unified server API interface
+export * from "./server";
+
 
