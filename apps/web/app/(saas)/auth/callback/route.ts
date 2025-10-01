@@ -47,9 +47,14 @@ export async function GET(request: NextRequest) {
 		);
 
 		// Exchange the code for a session
-		const { error } = await supabase.auth.exchangeCodeForSession(code);
+		const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
-		if (!error) {
+		if (error) {
+			console.error('[OAuth Callback] Error exchanging code for session:', error);
+			return NextResponse.redirect(`${origin}/auth/login?error=oauth_exchange_failed`);
+		}
+
+		if (data?.session) {
 			// Successful authentication - redirect to destination
 			const forwardedHost = request.headers.get('x-forwarded-host');
 			const isLocalEnv = process.env.NODE_ENV === 'development';
@@ -65,7 +70,9 @@ export async function GET(request: NextRequest) {
 			return NextResponse.redirect(`${origin}${next}`);
 		}
 
-		console.error('[OAuth Callback] Error exchanging code for session:', error);
+		// Edge case: no error but no session either
+		console.error('[OAuth Callback] No session created despite no error');
+		return NextResponse.redirect(`${origin}/auth/login?error=oauth_no_session`);
 	}
 
 	// Return the user to an error page with instructions or redirect to login
