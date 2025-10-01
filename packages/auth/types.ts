@@ -15,7 +15,9 @@ export interface User {
 	name: string | null;
 	imageUrl?: string | null;
 	username?: string | null;
+	role?: string | null;
 	onboardingComplete?: boolean;
+	locale?: string | null;
 	// Add other fields as needed
 }
 
