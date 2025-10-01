@@ -1,14 +1,6 @@
 "use client";
 import { createBrowserClient } from "@supabase/ssr";
-import type {
-    UnifiedClientAuthApi,
-    EmailSignInParams,
-    EmailSignUpParams,
-    MagicLinkParams,
-    SocialSignInParams,
-    PasskeySignInParams,
-    ClientGetSessionParams,
-} from "../../types";
+import type { AuthClient } from "../../types";
 import { toAuthErrorFromSupabase } from "../../lib/errors";
 import { mapSupabaseUserToAuthUser } from "./map";
 
@@ -19,9 +11,9 @@ function supa() {
     );
 }
 
-export const authClient: UnifiedClientAuthApi = {
+export const authClient: AuthClient = {
     signUp: {
-        async email({ email, password, name, callbackURL }: EmailSignUpParams) {
+        async email({ email, password, name, callbackURL }: any) {
             try {
                 const { error } = await supa().auth.signUp({
                     email,
@@ -39,7 +31,7 @@ export const authClient: UnifiedClientAuthApi = {
         },
     },
     signIn: {
-        async email({ email, password, callbackURL }: EmailSignInParams) {
+        async email({ email, password }: any) {
             try {
                 const { error } = await supa().auth.signInWithPassword({
                     email,
@@ -52,7 +44,7 @@ export const authClient: UnifiedClientAuthApi = {
                 return { data: undefined, error: toAuthErrorFromSupabase(e) };
             }
         },
-        async magicLink({ email, callbackURL }: MagicLinkParams) {
+        async magicLink({ email, callbackURL }: any) {
             try {
                 const { error } = await supa().auth.signInWithOtp({
                     email,
@@ -64,7 +56,7 @@ export const authClient: UnifiedClientAuthApi = {
                 return { data: undefined, error: toAuthErrorFromSupabase(e) };
             }
         },
-        async social({ provider, callbackURL }: SocialSignInParams) {
+        async social({ provider, callbackURL }: any) {
             try {
                 console.log('[Supabase OAuth] Starting signin with:', { provider, callbackURL });
                 
@@ -103,7 +95,7 @@ export const authClient: UnifiedClientAuthApi = {
                 return { data: undefined, error: toAuthErrorFromSupabase(e) };
             }
         },
-        async passkey(_params?: PasskeySignInParams) {
+        async passkey() {
             // Supabase doesn't natively support passkeys
             // Return not implemented error
             return {
@@ -124,7 +116,7 @@ export const authClient: UnifiedClientAuthApi = {
             return { data: undefined, error: toAuthErrorFromSupabase(e) };
         }
     },
-    async getSession(_params?: ClientGetSessionParams) {
+    async getSession(_params?: any) {
         try {
             const {
                 data: { user },
@@ -145,7 +137,7 @@ export const authClient: UnifiedClientAuthApi = {
         }
     },
     organization: {
-        async acceptInvitation({ invitationId }) {
+        async acceptInvitation({ invitationId }: any) {
             try {
                 // Call existing app endpoint that handles accept + seat updates
                 const res = await fetch(`/api/organization/accept-invitation`, {
@@ -163,7 +155,7 @@ export const authClient: UnifiedClientAuthApi = {
                 return { data: undefined, error: toAuthErrorFromSupabase(e) };
             }
         },
-        async rejectInvitation({ invitationId }) {
+        async rejectInvitation({ invitationId }: any) {
             try {
                 const res = await fetch(`/api/organization/reject-invitation`, {
                     method: "POST",

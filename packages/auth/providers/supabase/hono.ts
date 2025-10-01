@@ -43,7 +43,13 @@ export const authMiddleware = createMiddleware<{
         return c.json({ error: "Unauthorized" }, 401);
     }
 
-    c.set("user", mapSupabaseUserToAuthUser(data.user));
+    const authUser = mapSupabaseUserToAuthUser(data.user);
+    c.set("user", {
+        id: authUser.id,
+        email: authUser.email,
+        name: authUser.name ?? undefined,
+        image: authUser.imageUrl ?? undefined,
+    });
     await next();
 });
 

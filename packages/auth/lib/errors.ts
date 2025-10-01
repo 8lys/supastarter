@@ -1,4 +1,4 @@
-import type { AuthError, AuthErrorCode } from "../types";
+import type { AuthError } from "../types";
 
 function normalizeMessage(input: unknown): string {
     if (!input) return "Unknown error";
@@ -17,7 +17,7 @@ function normalizeMessage(input: unknown): string {
     }
 }
 
-function toCodeFromString(message: string): AuthErrorCode {
+function toCodeFromString(message: string): string {
     const msg = message.toLowerCase();
     if (msg.includes("invalid credentials") || msg.includes("wrong password"))
         return "INVALID_CREDENTIALS";
@@ -50,7 +50,7 @@ export function toAuthErrorFromBetterAuth(error: unknown): AuthError {
     const codeStr: unknown = error && typeof error === "object" ? error.code : undefined;
     const message = normalizeMessage(error);
     const fallback = toCodeFromString(message);
-    const code = typeof codeStr === "string" ? (codeStr as AuthErrorCode) : fallback;
+    const code = typeof codeStr === "string" ? codeStr : fallback;
     return { code, message, cause: error };
 }
 

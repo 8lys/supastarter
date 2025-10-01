@@ -21,4 +21,3 @@
 
 // Option 2: Supabase Auth (includes OAuth, magic link, email/password)
 export * from "./providers/supabase";
-export * from "./providers/supabase/server";

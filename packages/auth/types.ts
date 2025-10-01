@@ -14,6 +14,7 @@ export interface User {
 	email: string;
 	name: string | null;
 	imageUrl?: string | null;
+	username?: string | null;
 	onboardingComplete?: boolean;
 	// Add other fields as needed
 }
@@ -27,6 +28,7 @@ export interface Session {
 export interface AuthError {
 	code: string;
 	message: string;
+	cause?: unknown;
 }
 
 export type AuthResult<T> =
