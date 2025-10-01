@@ -1,69 +1,47 @@
 import "server-only";
-import { auth } from "@repo/auth";
+import { serverAuth } from "@repo/auth";
 import { getInvitationById } from "@repo/database";
 import { headers } from "next/headers";
 import { cache } from "react";
 
 export const getSession = cache(async () => {
-	const session = await auth.api.getSession({
-		headers: await headers(),
-		query: {
-			disableCookieCache: true,
-		},
-	});
-
-	return session;
+	const result = await serverAuth.getSession();
+	
+	// Return in the format expected by the app
+	if (result.error || !result.data) {
+		return { user: null, session: null };
+	}
+	
+	return result.data;
 });
 
-export const getActiveOrganization = cache(async (slug: string) => {
-	try {
-		const activeOrganization = await auth.api.getFullOrganization({
-			query: {
-				organizationSlug: slug,
-			},
-			headers: await headers(),
-		});
+// TODO: Migrate organization methods to Supabase or database queries
+// These methods currently rely on Better Auth's organization plugin
+// which is not available in Supabase provider
 
-		return activeOrganization;
-	} catch (error) {
-		return null;
-	}
+export const getActiveOrganization = cache(async (slug: string) => {
+	// TODO: Implement organization lookup via direct database query
+	// For now, returning null to allow auth flow to work
+	console.warn('[Auth] getActiveOrganization not yet implemented for Supabase provider');
+	return null;
 });
 
 export const getOrganizationList = cache(async () => {
-	try {
-		const organizationList = await auth.api.listOrganizations({
-			headers: await headers(),
-		});
-
-		return organizationList;
-	} catch (error) {
-		return [];
-	}
+	// TODO: Implement organization list via direct database query
+	console.warn('[Auth] getOrganizationList not yet implemented for Supabase provider');
+	return [];
 });
 
 export const getUserAccounts = cache(async () => {
-	try {
-		const userAccounts = await auth.api.listUserAccounts({
-			headers: await headers(),
-		});
-
-		return userAccounts;
-	} catch (error) {
-		return [];
-	}
+	// TODO: Implement user accounts via direct database query
+	console.warn('[Auth] getUserAccounts not yet implemented for Supabase provider');
+	return [];
 });
 
 export const getUserPasskeys = cache(async () => {
-	try {
-		const userPasskeys = await auth.api.listPasskeys({
-			headers: await headers(),
-		});
-
-		return userPasskeys;
-	} catch (error) {
-		return [];
-	}
+	// TODO: Passkeys not supported in Supabase provider
+	console.warn('[Auth] getUserPasskeys not supported in Supabase provider');
+	return [];
 });
 
 export const getInvitation = cache(async (id: string) => {
